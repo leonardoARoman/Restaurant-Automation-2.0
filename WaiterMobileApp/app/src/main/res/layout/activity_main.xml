@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginLeft="29dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 1"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.1"/>
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 2"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.2"/>
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 3"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.3"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 4"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.4"/>
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 5"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.5"/>
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 6"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.6"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 7"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.7"/>
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 8"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.8"/>
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 9"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.9"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 10"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.10"/>
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 11"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.11"/>
+                <Button
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@android:color/holo_green_light"
+                    android:layout_marginRight="15dp"
+                    android:text="table 12"
+                    android:onClick="updateTable"
+                    android:id="@+id/button.12"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="100dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Waiter Name:"
+                    android:textSize="20dp"/>
+                <EditText
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="110dp"
+            android:layout_marginBottom="120dp"
+            android:text="next"
+            android:textSize="25dp"/>
+    </LinearLayout>
+</LinearLayout>

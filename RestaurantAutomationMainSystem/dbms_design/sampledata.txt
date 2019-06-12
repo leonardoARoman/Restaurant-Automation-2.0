@@ -1,0 +1,9 @@
+
+insert into menu(item,section,price) values("steak","specials",29.99),("lobster","specials",39.99),
+("Pasta","specials",19.99),("Beer","drinks",9.99),("Wine","drink",9.99),("Soda","drink",5.99),
+("Brownie","desert",9.99),("Cake","Desert",8.99),("Ice cream","desert",6.99),("Hamburger","fast food",6.99),
+("Pizza pie","fast food",9.99),("Chess steak","fast food",6.99);
+
+
+insert into fingerPrint(hashedImage,empID) values("abc123","123");
+insert into employee(name,lname,job,empID) values("leonardo","roman","weiter","123");

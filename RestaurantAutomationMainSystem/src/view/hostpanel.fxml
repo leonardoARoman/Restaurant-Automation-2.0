@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="mainPain" prefHeight="344.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HostpanelController">
+   <children>
+      <ImageView AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../../images/cover.jpg" />
+         </image>
+      </ImageView>
+      <Button fx:id="kitchen" layoutX="14.0" layoutY="206.0" mnemonicParsing="false" onAction="#kitchenPanel" prefHeight="36.0" prefWidth="113.0" text="KITCHEN" />
+      <Button layoutX="473.0" layoutY="206.0" mnemonicParsing="false" onAction="#floorPanel" prefHeight="36.0" prefWidth="113.0" text="FLOOR" />
+      <Button layoutX="169.0" layoutY="206.0" mnemonicParsing="false" onAction="#clockinout" prefHeight="36.0" prefWidth="113.0" text="CLOCK IN/OUT" />
+      <Button layoutX="322.0" layoutY="206.0" mnemonicParsing="false" onAction="#adminPanel" prefHeight="36.0" prefWidth="113.0" text="ADMIN" />
+   </children>
+</AnchorPane>

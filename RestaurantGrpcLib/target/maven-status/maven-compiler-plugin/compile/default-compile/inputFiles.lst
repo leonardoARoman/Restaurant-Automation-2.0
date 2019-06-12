@@ -1,0 +1,13 @@
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/target/generated-sources/protobuf/java/io/grpc/restaurantnetworkapp/RestaurantServiceProto.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/target/generated-sources/protobuf/java/io/grpc/restaurantnetworkapp/TableRecordOrBuilder.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/src/main/java/com/service/RestaurantServer.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/target/generated-sources/protobuf/java/io/grpc/restaurantnetworkapp/TableRecord.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/target/generated-sources/protobuf/java/io/grpc/restaurantnetworkapp/Table.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/src/main/java/com/client/WaiterClient.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/target/generated-sources/protobuf/java/io/grpc/restaurantnetworkapp/TableOrBuilder.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/target/generated-sources/protobuf/java/io/grpc/restaurantnetworkapp/ResponseOrBuilder.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/src/main/java/com/client/HostClient.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/target/generated-sources/protobuf/grpc-java/io/grpc/restaurantnetworkapp/RestaurantServiceGrpc.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/target/generated-sources/protobuf/java/io/grpc/restaurantnetworkapp/Response.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/src/main/java/com/service/ServerInterceptorHandler.java
+/Users/leonardoroman/Desktop/RestaurantApplication/RestaurantGrpcLib/src/main/java/com/service/ServiceStub.java

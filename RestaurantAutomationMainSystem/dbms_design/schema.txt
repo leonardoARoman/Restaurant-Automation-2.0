@@ -1,0 +1,10 @@
+create database AutomatedRestaurant;
+
+create table menu(item varchar(15),section varchar(15), price float, primary key(item));
+
+create table reservation(name varchar(15), lastname varchar(15), phone varchar(15), time date, primary key(phone));
+
+
+create table fingerPrint(hashedImage varchar(50), empID varchar(25),foreign key(empID) references employee(empID));
+
+create table employee(name varchar(15), lname varchar(15),job varchar(15), empID varchar(25), primary key(empID));
