@@ -31,13 +31,13 @@ public class HostClient {
 		blockingStub = RestaurantServiceGrpc.newBlockingStub(channel);
 	}
 
-	public Response getResponse(int id)
+	public Response getResponse(int tableId, int stateValue)
 	{
-		logger.info("Will try to create table "+id+" and add it to restaurant...");
+		logger.info("Will try to create table "+tableId+" and add it to restaurant...");
 		Response response;
 		Table table = Table.newBuilder()
-				.setTableID(id)
-				.setStatus(Table.TableState.CLEAN)
+				.setTableID(tableId)
+				.setStatusValue(stateValue)
 				.build();
 		try 
 		{
@@ -47,7 +47,7 @@ public class HostClient {
 		{
 			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
 			response = Response.newBuilder()
-					.setMessage("Error: attempt to create table "+id+" failed!")
+					.setMessage("Error: attempt to create table "+tableId+" failed!")
 					.build();
 		}
 

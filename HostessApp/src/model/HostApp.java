@@ -2,6 +2,10 @@ package model;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.logging.Logger;
+
+import com.client.HostClient;
+
 import controller.HostController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +16,9 @@ import javafx.stage.Stage;
 public class HostApp 
 extends Application 
 {
+	private static final Logger logger 
+	= Logger.getLogger(HostApp.class.getName());
+
 	@Override
 	public void start(Stage primaryStage) 
 			throws IOException 
@@ -40,7 +47,7 @@ extends Application
 	public static void main(String[] args) 
 			throws UnknownHostException 
 	{
-		// Get Host IP address for reference.
+		// Get Host IP address for reference.		
 		launch(args);
 	}
 }

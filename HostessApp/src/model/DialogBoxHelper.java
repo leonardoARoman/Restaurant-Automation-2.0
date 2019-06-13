@@ -72,7 +72,7 @@ private DialogBoxHelper() {}
 			return 2;
 		} else if (result.get() == buttonTypeThree) {
 			// ... user chose "Three"
-			return 3;
+			return 0;
 		} else if (result.get() == buttonTypeFour) {
 			// ... user chose "Three"
 			return 4;

@@ -19,7 +19,10 @@ private TableState() {}
 	public static Image ocupiedTable(String image) throws IOException {
 		File photoFile = new File(image);
 		BufferedImage bi = ImageIO.read(photoFile);
-		BufferedImage bi2 = new BufferedImage(bi.getWidth(),bi.getHeight(),BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bi2 = new BufferedImage(
+				bi.getWidth(),
+				bi.getHeight(),
+				BufferedImage.TYPE_INT_ARGB);
 
 		for(int i = 0; i < bi.getHeight(); i++) {
 			for(int j = 0; j < bi.getWidth(); j++) {
