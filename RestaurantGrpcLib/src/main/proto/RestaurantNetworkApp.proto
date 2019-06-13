@@ -11,11 +11,12 @@ service RestaurantService
 {
 	/* add a list of tables: Generally taken care by launching the server */
 	rpc setup (TableRecord) returns (stream Table) {}
-	/* Setup Tables one time */
+	/* add a table to the restaurant: Taken care by admin */
 	rpc add	(Table) returns (Response) {}
 	/* Make update on a table get back table record list */
 	rpc update (Table) returns (stream Table) {}
-	/* Request table record list on waiter request or every 10 secods */
+	/* Request table record list on waiter request by refresh */
+	rpc tables (Response) returns (stream Table) {}
 }
 
 message Response
