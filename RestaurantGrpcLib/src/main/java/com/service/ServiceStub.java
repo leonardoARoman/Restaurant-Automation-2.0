@@ -27,7 +27,8 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	private static Collection<Table> tableRecord;
 	private static ArrayList<Table> tables;
 	private static String DB = "./src/main/database/RestaurantDB.db";
-	private static String URL = "./src/main/database/tableRecord.dat";
+	private static String URL1 = "./src/main/database/tableRecord.dat";
+	private static String URL = "./database/tableRecord.dat";
 
 	private ServiceStub() 
 	{
