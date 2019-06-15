@@ -53,8 +53,8 @@ public class HostController
 	public void start(Stage primaryStage) 
 	{
 		// TODO Auto-generated method stub
-		clientSub = new HostClient("192.168.1.11",8080);
-		//logger.info(clientSub.getResponse(15).getMessage());
+		clientSub = new HostClient("10.0.0.107",8080);
+		//clientSub.updateTable(15));
 		stage = primaryStage;
 		loader = new FXMLLoader();
 	}
@@ -117,27 +117,26 @@ public class HostController
 	public void table1ImageViewListener() throws IOException 
 	{
 		int action = DialogBoxHelper.tableAction();
-		logger.info("Table action "+action);
-
+		
 		if(action == 1) 
 		{
 			table1.setImage(TableState.ocupiedTable(url+"t1.png"));
 			floor1_table_1.setImage(TableState.ocupiedTable(url+"t1.png"));
-			logger.info(clientSub.getResponse(1,action).getMessage());
+			clientSub.updateTable(1,action);
 			return;
 		} 
 		else if(action == 2) 
 		{
 			table1.setImage(TableState.dirtyTable(url+"t1.png"));
 			floor1_table_1.setImage(TableState.dirtyTable(url+"t1.png"));
-			logger.info(clientSub.getResponse(1,action).getMessage());
+			clientSub.updateTable(1,action);
 			return;
 		} 
 		else if(action == 0) 
 		{
 			table1.setImage(TableState.cleanTable(url+"t1.png"));
 			floor1_table_1.setImage(TableState.cleanTable(url+"t1.png"));
-			logger.info(clientSub.getResponse(1,action).getMessage());
+			clientSub.updateTable(1,action);
 			return;
 		} 
 		else if(action == 4) 
@@ -158,21 +157,21 @@ public class HostController
 		{
 			table2.setImage(TableState.ocupiedTable(url+"t2.png"));
 			floor1_table_2.setImage(TableState.ocupiedTable(url+"t2.png"));
-			logger.info(clientSub.getResponse(2,action).getMessage());
+			clientSub.updateTable(2,action);
 			return;
 		} 
 		else if(action == 2) 
 		{
 			table2.setImage(TableState.dirtyTable(url+"t2.png"));
 			floor1_table_2.setImage(TableState.dirtyTable(url+"t2.png"));
-			logger.info(clientSub.getResponse(2,action).getMessage());
+			clientSub.updateTable(2,action);
 			return;
 		} 
 		else if(action == 0) 
 		{
 			table2.setImage(TableState.cleanTable(url+"t2.png"));
 			floor1_table_2.setImage(TableState.cleanTable(url+"t2.png"));
-			logger.info(clientSub.getResponse(2,action).getMessage());
+			clientSub.updateTable(2,action);
 			return;
 		} 
 		else if(action == 4) 
@@ -193,21 +192,21 @@ public class HostController
 		{
 			table3.setImage(TableState.ocupiedTable(url+"t3.png"));
 			floor2_table_1.setImage(TableState.ocupiedTable(url+"t3.png"));
-			logger.info(clientSub.getResponse(3,action).getMessage());
+			clientSub.updateTable(3,action);
 			return;
 		} 
 		else if(action == 2) 
 		{
 			table3.setImage(TableState.dirtyTable(url+"t3.png"));
 			floor2_table_1.setImage(TableState.dirtyTable(url+"t3.png"));
-			logger.info(clientSub.getResponse(3,action).getMessage());
+			clientSub.updateTable(3,action);
 			return;
 		} 
 		else if(action == 0) 
 		{
 			table3.setImage(TableState.cleanTable(url+"t3.png"));
 			floor2_table_1.setImage(TableState.cleanTable(url+"t3.png"));
-			logger.info(clientSub.getResponse(3,action).getMessage());
+			clientSub.updateTable(3,action);
 			return;
 		} 
 		else if(action == 4)
@@ -228,21 +227,21 @@ public class HostController
 		{
 			table4.setImage(TableState.ocupiedTable(url+"t4.png"));
 			floor2_table_2.setImage(TableState.ocupiedTable(url+"t4.png"));
-			logger.info(clientSub.getResponse(4,action).getMessage());
+			clientSub.updateTable(4,action);
 			return;
 		} 
 		else if(action == 2) 
 		{
 			table4.setImage(TableState.dirtyTable(url+"t4.png"));
 			floor2_table_2.setImage(TableState.dirtyTable(url+"t4.png"));
-			logger.info(clientSub.getResponse(4,action).getMessage());
+			clientSub.updateTable(4,action);
 			return;
 		} 
 		else if(action == 0) 
 		{
 			table4.setImage(TableState.cleanTable(url+"t4.png"));
 			floor2_table_2.setImage(TableState.cleanTable(url+"t4.png"));
-			logger.info(clientSub.getResponse(4,action).getMessage());
+			clientSub.updateTable(4,action);
 			return;
 		} 
 		else if(action == 4) 
@@ -262,17 +261,17 @@ public class HostController
 		if(action == 1) {
 			table5.setImage(TableState.ocupiedTable(url+"t5.png"));
 			floor1_table_3.setImage(TableState.ocupiedTable(url+"t5.png"));
-			logger.info(clientSub.getResponse(5,action).getMessage());
+			clientSub.updateTable(5,action);
 			return;
 		} else if(action == 2) {
 			table5.setImage(TableState.dirtyTable(url+"t5.png"));
 			floor1_table_3.setImage(TableState.dirtyTable(url+"t5.png"));
-			logger.info(clientSub.getResponse(5,action).getMessage());
+			clientSub.updateTable(5,action);
 			return;
 		} else if(action == 0) {
 			table5.setImage(TableState.cleanTable(url+"t5.png"));
 			floor1_table_3.setImage(TableState.cleanTable(url+"t5.png"));
-			logger.info(clientSub.getResponse(5,action).getMessage());
+			clientSub.updateTable(5,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -290,17 +289,17 @@ public class HostController
 		if(action == 1) {
 			table6.setImage(TableState.ocupiedTable(url+"t6.png"));
 			floor1_table_4.setImage(TableState.ocupiedTable(url+"t6.png"));
-			logger.info(clientSub.getResponse(6,action).getMessage());
+			clientSub.updateTable(6,action);
 			return;
 		} else if(action == 2) {
 			table6.setImage(TableState.dirtyTable(url+"t6.png"));
 			floor1_table_4.setImage(TableState.dirtyTable(url+"t6.png"));
-			logger.info(clientSub.getResponse(6,action).getMessage());
+			clientSub.updateTable(6,action);
 			return;
 		} else if(action == 0) {
 			table6.setImage(TableState.cleanTable(url+"t6.png"));
 			floor1_table_4.setImage(TableState.cleanTable(url+"t6.png"));
-			logger.info(clientSub.getResponse(6,action).getMessage());
+			clientSub.updateTable(6,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -318,17 +317,17 @@ public class HostController
 		if(action == 1) {
 			table7.setImage(TableState.ocupiedTable(url+"t7.png"));
 			floor2_table_3.setImage(TableState.ocupiedTable(url+"t7.png"));
-			logger.info(clientSub.getResponse(7,action).getMessage());
+			clientSub.updateTable(7,action);
 			return;
 		} else if(action == 2) {
 			table7.setImage(TableState.dirtyTable(url+"t7.png"));
 			floor2_table_3.setImage(TableState.dirtyTable(url+"t7.png"));
-			logger.info(clientSub.getResponse(7,action).getMessage());
+			clientSub.updateTable(7,action);
 			return;
 		} else if(action == 0) {
 			table7.setImage(TableState.cleanTable(url+"t7.png"));
 			floor2_table_3.setImage(TableState.cleanTable(url+"t7.png"));
-			logger.info(clientSub.getResponse(7,action).getMessage());
+			clientSub.updateTable(7,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -346,17 +345,17 @@ public class HostController
 		if(action == 1) {
 			table8.setImage(TableState.ocupiedTable(url+"t8.png"));
 			floor2_table_4.setImage(TableState.ocupiedTable(url+"t8.png"));
-			logger.info(clientSub.getResponse(8,action).getMessage());
+			clientSub.updateTable(8,action);
 			return;
 		} else if(action == 2) {
 			table8.setImage(TableState.dirtyTable(url+"t8.png"));
 			floor2_table_4.setImage(TableState.dirtyTable(url+"t8.png"));
-			logger.info(clientSub.getResponse(8,action).getMessage());
+			clientSub.updateTable(8,action);
 			return;
 		} else if(action == 0) {
 			table8.setImage(TableState.cleanTable(url+"t8.png"));
 			floor2_table_4.setImage(TableState.cleanTable(url+"t8.png"));
-			logger.info(clientSub.getResponse(8,action).getMessage());
+			clientSub.updateTable(8,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -374,17 +373,17 @@ public class HostController
 		if(action == 1) {
 			table9.setImage(TableState.ocupiedTable(url+"t9.png"));
 			floor1_table_5.setImage(TableState.ocupiedTable(url+"t9.png"));
-			logger.info(clientSub.getResponse(9,action).getMessage());
+			clientSub.updateTable(9,action);
 			return;
 		} else if(action == 2) {
 			table9.setImage(TableState.dirtyTable(url+"t9.png"));
 			floor1_table_5.setImage(TableState.dirtyTable(url+"t9.png"));
-			logger.info(clientSub.getResponse(9,action).getMessage());
+			clientSub.updateTable(9,action);
 			return;
 		} else if(action == 0) {
 			table9.setImage(TableState.cleanTable(url+"t9.png"));
 			floor1_table_5.setImage(TableState.cleanTable(url+"t9.png"));
-			logger.info(clientSub.getResponse(9,action).getMessage());
+			clientSub.updateTable(9,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -402,17 +401,17 @@ public class HostController
 		if(action == 1) {
 			table10.setImage(TableState.ocupiedTable(url+"t10.png"));
 			floor1_table_6.setImage(TableState.ocupiedTable(url+"t10.png"));
-			logger.info(clientSub.getResponse(10,action).getMessage());
+			clientSub.updateTable(10,action);
 			return;
 		} else if(action == 2) {
 			table10.setImage(TableState.dirtyTable(url+"t10.png"));
 			floor1_table_6.setImage(TableState.dirtyTable(url+"t10.png"));
-			logger.info(clientSub.getResponse(10,action).getMessage());
+			clientSub.updateTable(10,action);
 			return;
 		} else if(action == 0) {
 			table10.setImage(TableState.cleanTable(url+"t10.png"));
 			floor1_table_6.setImage(TableState.cleanTable(url+"t10.png"));
-			logger.info(clientSub.getResponse(10,action).getMessage());
+			clientSub.updateTable(10,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -430,17 +429,17 @@ public class HostController
 		if(action == 1) {
 			table11.setImage(TableState.ocupiedTable(url+"t11.png"));
 			floor2_table_5.setImage(TableState.ocupiedTable(url+"t11.png"));
-			logger.info(clientSub.getResponse(11,action).getMessage());
+			clientSub.updateTable(11,action);
 			return;
 		} else if(action == 2) {
 			table11.setImage(TableState.dirtyTable(url+"t11.png"));
 			floor2_table_5.setImage(TableState.dirtyTable(url+"t11.png"));
-			logger.info(clientSub.getResponse(11,action).getMessage());
+			clientSub.updateTable(11,action);
 			return;
 		} else if(action == 0) {
 			table11.setImage(TableState.cleanTable(url+"t11.png"));
 			floor2_table_5.setImage(TableState.cleanTable(url+"t11.png"));
-			logger.info(clientSub.getResponse(11,action).getMessage());
+			clientSub.updateTable(11,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -458,17 +457,17 @@ public class HostController
 		if(action == 1) {
 			table12.setImage(TableState.ocupiedTable(url+"t12.png"));
 			floor2_table_6.setImage(TableState.ocupiedTable(url+"t12.png"));
-			logger.info(clientSub.getResponse(12,action).getMessage());
+			clientSub.updateTable(12,action);
 			return;
 		} else if(action == 2) {
 			table12.setImage(TableState.dirtyTable(url+"t12.png"));
 			floor2_table_6.setImage(TableState.dirtyTable(url+"t12.png"));
-			logger.info(clientSub.getResponse(12,action).getMessage());
+			clientSub.updateTable(12,action);
 			return;
 		} else if(action == 0) {
 			table12.setImage(TableState.cleanTable(url+"t12.png"));
 			floor2_table_6.setImage(TableState.cleanTable(url+"t12.png"));
-			logger.info(clientSub.getResponse(12,action).getMessage());
+			clientSub.updateTable(12,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -486,17 +485,17 @@ public class HostController
 		if(action == 1) {
 			table20.setImage(TableState.ocupiedTable(url+"t20.png"));
 			floor3_table_1.setImage(TableState.ocupiedTable(url+"t20.png"));
-			logger.info(clientSub.getResponse(13,action).getMessage());
+			clientSub.updateTable(13,action);
 			return;
 		} else if(action == 2) {
 			table20.setImage(TableState.dirtyTable(url+"t20.png"));
 			floor3_table_1.setImage(TableState.dirtyTable(url+"t20.png"));
-			logger.info(clientSub.getResponse(13,action).getMessage());
+			clientSub.updateTable(13,action);
 			return;
 		} else if(action == 0) {
 			table20.setImage(TableState.cleanTable(url+"t20.png"));
 			floor3_table_1.setImage(TableState.cleanTable(url+"t20.png"));
-			logger.info(clientSub.getResponse(13,action).getMessage());
+			clientSub.updateTable(13,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -514,17 +513,17 @@ public class HostController
 		if(action == 1) {
 			table21.setImage(TableState.ocupiedTable(url+"t21.png"));
 			floor3_table_2.setImage(TableState.ocupiedTable(url+"t21.png"));
-			logger.info(clientSub.getResponse(14,action).getMessage());
+			clientSub.updateTable(14,action);
 			return;
 		} else if(action == 2) {
 			table21.setImage(TableState.dirtyTable(url+"t21.png"));
 			floor3_table_2.setImage(TableState.dirtyTable(url+"t21.png"));
-			logger.info(clientSub.getResponse(14,action).getMessage());
+			clientSub.updateTable(14,action);
 			return;
 		} else if(action == 0) {
 			table21.setImage(TableState.cleanTable(url+"t21.png"));
 			floor3_table_2.setImage(TableState.cleanTable(url+"t21.png"));
-			logger.info(clientSub.getResponse(14,action).getMessage());
+			clientSub.updateTable(14,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -542,17 +541,17 @@ public class HostController
 		if(action == 1) {
 			table22.setImage(TableState.ocupiedTable(url+"t22.png"));
 			floor4_table_1.setImage(TableState.ocupiedTable(url+"t22.png"));
-			logger.info(clientSub.getResponse(15,action).getMessage());
+			clientSub.updateTable(15,action);
 			return;
 		} else if(action == 2) {
 			table22.setImage(TableState.dirtyTable(url+"t22.png"));
 			floor4_table_1.setImage(TableState.dirtyTable(url+"t22.png"));
-			logger.info(clientSub.getResponse(15,action).getMessage());
+			clientSub.updateTable(15,action);
 			return;
 		} else if(action == 0) {
 			table22.setImage(TableState.cleanTable(url+"t22.png"));
 			floor4_table_1.setImage(TableState.cleanTable(url+"t22.png"));
-			logger.info(clientSub.getResponse(15,action).getMessage());
+			clientSub.updateTable(15,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -570,17 +569,17 @@ public class HostController
 		if(action == 1) {
 			table23.setImage(TableState.ocupiedTable(url+"t23.png"));
 			floor4_table_2.setImage(TableState.ocupiedTable(url+"t23.png"));
-			logger.info(clientSub.getResponse(16,action).getMessage());
+			clientSub.updateTable(16,action);
 			return;
 		} else if(action == 2) {
 			table23.setImage(TableState.dirtyTable(url+"t23.png"));
 			floor4_table_2.setImage(TableState.dirtyTable(url+"t23.png"));
-			logger.info(clientSub.getResponse(16,action).getMessage());
+			clientSub.updateTable(16,action);
 			return;
 		} else if(action == 0) {
 			table23.setImage(TableState.cleanTable(url+"t23.png"));
 			floor4_table_2.setImage(TableState.cleanTable(url+"t23.png"));
-			logger.info(clientSub.getResponse(16,action).getMessage());
+			clientSub.updateTable(16,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -598,17 +597,17 @@ public class HostController
 		if(action == 1) {
 			table24.setImage(TableState.ocupiedTable(url+"t24.png"));
 			floor3_table_3.setImage(TableState.ocupiedTable(url+"t24.png"));
-			logger.info(clientSub.getResponse(17,action).getMessage());
+			clientSub.updateTable(17,action);
 			return;
 		} else if(action == 2) {
 			table24.setImage(TableState.dirtyTable(url+"t24.png"));
 			floor3_table_3.setImage(TableState.dirtyTable(url+"t24.png"));
-			logger.info(clientSub.getResponse(17,action).getMessage());
+			clientSub.updateTable(17,action);
 			return;
 		} else if(action == 0) {
 			table24.setImage(TableState.cleanTable(url+"t24.png"));
 			floor3_table_3.setImage(TableState.cleanTable(url+"t24.png"));
-			logger.info(clientSub.getResponse(17,action).getMessage());
+			clientSub.updateTable(17,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -626,17 +625,17 @@ public class HostController
 		if(action == 1) {
 			table25.setImage(TableState.ocupiedTable(url+"t25.png"));
 			floor3_table_4.setImage(TableState.ocupiedTable(url+"t25.png"));
-			logger.info(clientSub.getResponse(18,action).getMessage());
+			clientSub.updateTable(18,action);
 			return;
 		} else if(action == 2) {
 			table25.setImage(TableState.dirtyTable(url+"t25.png"));
 			floor3_table_4.setImage(TableState.dirtyTable(url+"t25.png"));
-			logger.info(clientSub.getResponse(18,action).getMessage());
+			clientSub.updateTable(18,action);
 			return;
 		} else if(action == 0) {
 			table25.setImage(TableState.cleanTable(url+"t25.png"));
 			floor3_table_4.setImage(TableState.cleanTable(url+"t25.png"));
-			logger.info(clientSub.getResponse(18,action).getMessage());
+			clientSub.updateTable(18,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -654,17 +653,17 @@ public class HostController
 		if(action == 1) {
 			table26.setImage(TableState.ocupiedTable(url+"t26.png"));
 			floor4_table_3.setImage(TableState.ocupiedTable(url+"t26.png"));
-			logger.info(clientSub.getResponse(19,action).getMessage());
+			clientSub.updateTable(19,action);
 			return;
 		} else if(action == 2) {
 			table26.setImage(TableState.dirtyTable(url+"t26.png"));
 			floor4_table_3.setImage(TableState.dirtyTable(url+"t26.png"));
-			logger.info(clientSub.getResponse(19,action).getMessage());
+			clientSub.updateTable(19,action);
 			return;
 		} else if(action == 0) {
 			table26.setImage(TableState.cleanTable(url+"t26.png"));
 			floor4_table_3.setImage(TableState.cleanTable(url+"t26.png"));
-			logger.info(clientSub.getResponse(19,action).getMessage());
+			clientSub.updateTable(19,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -682,17 +681,17 @@ public class HostController
 		if(action == 1) {
 			table27.setImage(TableState.ocupiedTable(url+"t27.png"));
 			floor4_table_4.setImage(TableState.ocupiedTable(url+"t27.png"));
-			logger.info(clientSub.getResponse(20,action).getMessage());
+			clientSub.updateTable(20,action);
 			return;
 		} else if(action == 2) {
 			table27.setImage(TableState.dirtyTable(url+"t27.png"));
 			floor4_table_4.setImage(TableState.dirtyTable(url+"t27.png"));
-			logger.info(clientSub.getResponse(20,action).getMessage());
+			clientSub.updateTable(20,action);
 			return;
 		} else if(action == 0) {
 			table27.setImage(TableState.cleanTable(url+"t27.png"));
 			floor4_table_4.setImage(TableState.cleanTable(url+"t27.png"));
-			logger.info(clientSub.getResponse(20,action).getMessage());
+			clientSub.updateTable(20,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -710,17 +709,17 @@ public class HostController
 		if(action == 1) {
 			table28.setImage(TableState.ocupiedTable(url+"t28.png"));
 			floor3_table_5.setImage(TableState.ocupiedTable(url+"t28.png"));
-			logger.info(clientSub.getResponse(21,action).getMessage());
+			clientSub.updateTable(21,action);
 			return;
 		} else if(action == 2) {
 			table28.setImage(TableState.dirtyTable(url+"t28.png"));
 			floor3_table_5.setImage(TableState.dirtyTable(url+"t28.png"));
-			logger.info(clientSub.getResponse(21,action).getMessage());
+			clientSub.updateTable(21,action);
 			return;
 		} else if(action == 0) {
 			table28.setImage(TableState.cleanTable(url+"t28.png"));
 			floor3_table_5.setImage(TableState.cleanTable(url+"t28.png"));
-			logger.info(clientSub.getResponse(21,action).getMessage());
+			clientSub.updateTable(21,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -738,17 +737,17 @@ public class HostController
 		if(action == 1) {
 			table29.setImage(TableState.ocupiedTable(url+"t29.png"));
 			floor3_table_6.setImage(TableState.ocupiedTable(url+"t29.png"));
-			logger.info(clientSub.getResponse(22,action).getMessage());
+			clientSub.updateTable(22,action);
 			return;
 		} else if(action == 2) {
 			table29.setImage(TableState.dirtyTable(url+"t29.png"));
 			floor3_table_6.setImage(TableState.dirtyTable(url+"t29.png"));
-			logger.info(clientSub.getResponse(22,action).getMessage());
+			clientSub.updateTable(22,action);
 			return;
 		} else if(action == 0) {
 			table29.setImage(TableState.cleanTable(url+"t29.png"));
 			floor3_table_6.setImage(TableState.cleanTable(url+"t29.png"));
-			logger.info(clientSub.getResponse(22,action).getMessage());
+			clientSub.updateTable(22,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -766,17 +765,17 @@ public class HostController
 		if(action == 1) {
 			table30.setImage(TableState.ocupiedTable(url+"t30.png"));
 			floor4_table_5.setImage(TableState.ocupiedTable(url+"t30.png"));
-			logger.info(clientSub.getResponse(23,action).getMessage());
+			clientSub.updateTable(23,action);
 			return;
 		} else if(action == 2) {
 			table30.setImage(TableState.dirtyTable(url+"t30.png"));
 			floor4_table_5.setImage(TableState.dirtyTable(url+"t30.png"));
-			logger.info(clientSub.getResponse(23,action).getMessage());
+			clientSub.updateTable(23,action);
 			return;
 		} else if(action == 0) {
 			table30.setImage(TableState.cleanTable(url+"t30.png"));
 			floor4_table_5.setImage(TableState.cleanTable(url+"t30.png"));
-			logger.info(clientSub.getResponse(23,action).getMessage());
+			clientSub.updateTable(23,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -794,17 +793,17 @@ public class HostController
 		if(action == 1) {
 			table31.setImage(TableState.ocupiedTable(url+"t31.png"));
 			floor4_table_6.setImage(TableState.ocupiedTable(url+"t31.png"));
-			logger.info(clientSub.getResponse(24,action).getMessage());
+			clientSub.updateTable(24,action);
 			return;
 		} else if(action == 2) {
 			table31.setImage(TableState.dirtyTable(url+"t31.png"));
 			floor4_table_6.setImage(TableState.dirtyTable(url+"t31.png"));
-			logger.info(clientSub.getResponse(24,action).getMessage());
+			clientSub.updateTable(24,action);
 			return;
 		} else if(action == 0) {
 			table31.setImage(TableState.cleanTable(url+"t31.png"));
 			floor4_table_6.setImage(TableState.cleanTable(url+"t31.png"));
-			logger.info(clientSub.getResponse(24,action).getMessage());
+			clientSub.updateTable(24,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
