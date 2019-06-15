@@ -45,10 +45,10 @@ public class HostClient {
 	 * getTable returns Table state record.
 	 * @return 
 	 */
-	public Collection<Table> getTables()
+	public ArrayList<Table> getTables()
 	{
 		logger.info("Will try to get tables from database...");
-		Collection<Table> tables = new ArrayList<Table>();
+		ArrayList<Table> tables = new ArrayList<Table>();
 		Iterator<Table> response = null;
 		try 
 		{
@@ -92,6 +92,7 @@ public class HostClient {
 			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
 			response =  null;
 		}
+		logger.info("Table "+tableId+" is now "+status[tableState]);
 		return response;
 	}
 	/*
