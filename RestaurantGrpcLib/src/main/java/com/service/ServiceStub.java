@@ -21,7 +21,7 @@ import io.grpc.stub.StreamObserver;
 public class ServiceStub extends 
 RestaurantServiceGrpc.RestaurantServiceImplBase 
 {
-	
+
 	private static final Logger logger = Logger.getLogger(ServiceStub.class.getName());
 	private static ServiceStub instance;
 	private static Collection<Table> tableRecord;
@@ -39,7 +39,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	{
 		this.tableRecord = tableRecord;
 	}
-	
+
 	public static ServiceStub getInstance() throws IOException 
 	{
 		if(instance==null) 
@@ -49,6 +49,21 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		return instance;
 	}
 
+	public static ServiceStub getInstance(Collection<Table> tableRecord) throws IOException 
+	{
+		if(instance==null) 
+		{
+			instance = new ServiceStub(tableRecord);
+			try 
+			{
+				updateTableRecord();
+			} catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		return instance;
+	}
 
 	@Override
 	public void setup(TableRecord tablerecord, 
@@ -56,7 +71,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	{
 		responseObserver.onCompleted();
 	}
-	
+
 	@Override
 	public void add(Table table,
 			StreamObserver<Response> responseObserver) 
@@ -77,7 +92,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
 	}
-	
+
 	@Override
 	public void update(Table tableUpdate, 
 			StreamObserver<Table> responseObserver) 
@@ -98,6 +113,15 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 
 		responseObserver.onCompleted();
 	}
+
+	@Override
+	public void tables(Response request,
+			StreamObserver<Table> responseObserver)
+	{
+		for(Table table: tableRecord) { responseObserver.onNext(table); }
+
+		responseObserver.onCompleted();
+	}
 	
 	private Collection<Table> deserialize() throws IOException, ClassNotFoundException
 	{
@@ -115,7 +139,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		Collection<Table> alp = (ArrayList<Table>)ois.readObject();
 		return alp;
 	}
-	
+
 	private static void updateTableRecord() throws IOException 
 	{
 		ObjectOutputStream outputStream = null;

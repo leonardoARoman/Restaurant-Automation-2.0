@@ -1,5 +1,8 @@
 package com.client;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.client.HostClient;
@@ -9,7 +12,14 @@ import io.grpc.restaurantnetworkapp.Table;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
- 
+/**
+ * 
+ * @author Roman
+ * Host API handles stub calls to the service 
+ * 1. Update tables
+ * 2. Request table state record
+ * 
+ */
 public class HostClient {
 	private static final Logger logger = Logger.getLogger(HostClient.class.getName());
 	private final ManagedChannel channel;
@@ -31,27 +41,65 @@ public class HostClient {
 		blockingStub = RestaurantServiceGrpc.newBlockingStub(channel);
 	}
 
-	public Response getResponse(int tableId, int stateValue)
+	/**
+	 * getTable returns Table state record.
+	 * @return 
+	 */
+	public Collection<Table> getTables()
 	{
-		logger.info("Will try to create table "+tableId+" and add it to restaurant...");
-		Response response;
-		Table table = Table.newBuilder()
-				.setTableID(tableId)
-				.setStatusValue(stateValue)
-				.build();
+		logger.info("Will try to get tables from database...");
+		Collection<Table> tables = new ArrayList<Table>();
+		Iterator<Table> response = null;
 		try 
 		{
-			response = blockingStub.add(table);
+			response = blockingStub.tables(Response
+					.newBuilder()
+					.setMessage("Get talbe record")
+					.build());
 		}
 		catch (StatusRuntimeException e)
 		{
 			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-			response = Response.newBuilder()
-					.setMessage("Error: attempt to create table "+tableId+" failed!")
-					.build();
 		}
-
-		logger.info("Table "+table.getTableID()+" created, status "+status[table.getStatusValue()]);
+		while(response.hasNext())
+		{
+			Table table= response.next();
+			tables.add(table);
+			logger.info("Table "+table.getTableID()+" status "+status[table.getStatusValue()]);
+		}
+		return tables;
+	}
+	
+	/**
+	 * updateTable updates a table given an id table
+	 * returns table state record
+	 * @param id
+	 * @return
+	 */
+	public Iterator<Table> updateTable(int id) {
+		logger.info("Will try update table "+id+"...");
+		Iterator<Table> response = null;
+		Table table = Table.newBuilder()
+				.setTableID(id)
+				.setStatus(Table.TableState.DIRTY)
+				.build();
+		try 
+		{
+			response = blockingStub.update(table);
+		} 
+		catch (StatusRuntimeException e) 
+		{
+			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+			response =  null;
+		}
 		return response;
 	}
+	/*
+	public static void main(String[] args)
+	{
+		HostClient clientStub = new HostClient("10.0.0.107",8080);
+		
+		clientStub.getTables();
+	}
+	*/
 }
