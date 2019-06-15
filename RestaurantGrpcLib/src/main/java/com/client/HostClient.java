@@ -76,12 +76,12 @@ public class HostClient {
 	 * @param id
 	 * @return
 	 */
-	public Iterator<Table> updateTable(int id) {
-		logger.info("Will try update table "+id+"...");
+	public Iterator<Table> updateTable(int tableId, int tableState) {
+		logger.info("Will try update table "+tableId+"...");
 		Iterator<Table> response = null;
 		Table table = Table.newBuilder()
-				.setTableID(id)
-				.setStatus(Table.TableState.DIRTY)
+				.setTableID(tableId)
+				.setStatusValue(tableState)
 				.build();
 		try 
 		{
