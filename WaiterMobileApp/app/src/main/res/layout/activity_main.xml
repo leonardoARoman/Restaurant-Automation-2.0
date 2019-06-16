@@ -22,7 +22,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 1"
                     android:onClick="updateTable"
@@ -30,7 +30,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 2"
                     android:onClick="updateTable"
@@ -38,7 +38,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 3"
                     android:onClick="updateTable"
@@ -52,7 +52,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 4"
                     android:onClick="updateTable"
@@ -60,7 +60,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 5"
                     android:onClick="updateTable"
@@ -68,7 +68,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 6"
                     android:onClick="updateTable"
@@ -82,7 +82,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 7"
                     android:onClick="updateTable"
@@ -90,7 +90,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 8"
                     android:onClick="updateTable"
@@ -98,7 +98,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 9"
                     android:onClick="updateTable"
@@ -112,7 +112,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 10"
                     android:onClick="updateTable"
@@ -120,7 +120,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 11"
                     android:onClick="updateTable"
@@ -128,7 +128,7 @@
                 <Button
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:background="@android:color/holo_green_light"
+                    android:background="@drawable/customed_button"
                     android:layout_marginRight="15dp"
                     android:text="table 12"
                     android:onClick="updateTable"
