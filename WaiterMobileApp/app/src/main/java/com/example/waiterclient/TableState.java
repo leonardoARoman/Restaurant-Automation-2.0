@@ -26,8 +26,9 @@ public class TableState {
         //this.tableColorState = tableColorState;
     }
 
-    public int getTableNumber() { return tableNumber;               }
-    public int getTableState()  { return tableState;                }
-    public void changeState()   { tableState = (tableState+1)%3;    }
-    public Button getButton()   { return button;                    }
+    public int getTableNumber()                 { return tableNumber;             }
+    public int getTableState()                  { return tableState;              }
+    public void setTableState(int tableState)   { this.tableState = tableState;   }
+    public void changeState()                   { tableState = (tableState+1)%3;  }
+    public Button getButton()                   { return button;                  }
 }
