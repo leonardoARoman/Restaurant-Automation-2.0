@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import io.grpc.restaurantnetworkapp.Order;
@@ -17,7 +19,6 @@ import com.service.ServiceStub;
 import io.grpc.restaurantnetworkapp.Table;
 import io.grpc.restaurantnetworkapp.TableRecord;
 import io.grpc.stub.StreamObserver;
-
 import io.grpc.stub.StreamObserver;
 
 public class ServiceStub extends 
@@ -28,22 +29,24 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	private static ServiceStub instance;
 	private static Collection<Table> tableRecord;
 	private static Collection<Order> orderRecord;
-	private static ArrayList<Table> tables;
-	private static String DB = "./src/main/database/RestaurantDB.db";
-	private static String URL1 = "./src/main/database/tableRecord.dat";
-	private static String URL = "./database/tableRecord.dat";
-	private static String URL2 = "./database/orderRecord.dat";
+	private static Map<Integer,Order> orderIDs;
+	//private static String DB = "./src/main/database/RestaurantDB.db";
+	private static String URL = "./src/main/database/tableRecord.dat";
+	//private static String URL = "./database/tableRecord.dat";
+	private static String URL2 = "./src/main/database/orderRecord.dat";
 
 	private ServiceStub() 
 	{
 		tableRecord = new ArrayList<Table>();
 		orderRecord = new ArrayList<Order>();
+		orderIDs = new HashMap<Integer,Order>();
 	}
 
 	private ServiceStub(Collection<Table> tableRecord)
 	{
 		this.tableRecord = tableRecord;
 		orderRecord = new ArrayList<Order>();
+		orderIDs = new HashMap<Integer,Order>();
 	}
 
 	public static ServiceStub getInstance() throws IOException 
@@ -129,8 +132,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 
 	@Override
 	public void tables(Response request,
-			StreamObserver<Table> responseObserver)
-	{
+			StreamObserver<Table> responseObserver) {
 		for(Table table: tableRecord) { responseObserver.onNext(table); }
 
 		responseObserver.onCompleted();
@@ -139,23 +141,33 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 
 	@Override
 	public void order(Order order, 
-			StreamObserver<Response> responseObserver) 
-	{
-		orderRecord.add(order);
-		try 
-		{
-			saveOrder();
-		} catch (IOException e) 
-		{
-			e.printStackTrace();
+			StreamObserver<Response> responseObserver) {
+		Response response = null;
+		// If the order exists then the order is being updated
+		if(orderIDs.containsKey(order.getOrderID())) {
+			orderRecord.remove(orderIDs.get(order.getOrderID()));
+			orderRecord.add(order);
+			//orderIDs.remove(order.getOrderID());
+			//orderIDs.put(order.getOrderID(),order);
+			response = Response
+					.newBuilder()
+					.setMessage("Order number "+order.getOrderNo()+" is ready.")
+					.build();
+		} else {
+			orderIDs.put(order.getOrderID(),order);
+			orderRecord.add(order);
+			response = Response
+					.newBuilder()
+					.setMessage("Order number "+order.getOrderNo()+" is inqueue.")
+					.build();
 		}
 
-		Response response = Response
-				.newBuilder()
-				.setMessage("Order number "+order.getOrderNo()+" added to order record")
-				.build();
+		try {
+			saveOrder();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		responseObserver.onNext(response);
-		responseObserver.onCompleted();
 		responseObserver.onCompleted();
 	}
 
@@ -164,22 +176,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			StreamObserver<Order> responseObserver) 
 	{
 		int orderNumber = Integer.parseInt(request.getMessage());
-
-		for(Order order: orderRecord) 
-		{
-			if(order.getOrderNo()==orderNumber)
-			{
-				if(order.getIsReady()) {
-					Response
-					.newBuilder()
-					.setMessage("Order is ready.");
-				}else {
-					Response
-					.newBuilder()
-					.setMessage("Order is not ready.");
-				}
-			}
-		}
+		responseObserver.onNext(orderIDs.get(orderNumber));
 		responseObserver.onCompleted();
 	}
 
