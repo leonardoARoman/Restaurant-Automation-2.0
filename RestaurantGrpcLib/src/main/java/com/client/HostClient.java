@@ -76,7 +76,7 @@ public class HostClient {
 	 * @param id
 	 * @return
 	 */
-	public Iterator<Table> updateTable(int tableId, int tableState) {
+	public void updateTable(int tableId, int tableState) {
 		logger.info("Will try update table "+tableId+"...");
 		Iterator<Table> response = null;
 		Table table = Table.newBuilder()
@@ -93,7 +93,6 @@ public class HostClient {
 			response =  null;
 		}
 		logger.info("Table "+tableId+" is now "+status[tableState]);
-		return response;
 	}
 	/*
 	public static void main(String[] args)

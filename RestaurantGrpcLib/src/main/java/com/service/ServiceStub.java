@@ -107,6 +107,13 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 				break;
 			}
 		}
+		try 
+		{
+			updateTableRecord();
+		} catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 		for(Table table: tableRecord) 
 		{ 
 			responseObserver.onNext(table); 
