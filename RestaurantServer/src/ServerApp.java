@@ -13,7 +13,7 @@ import io.grpc.restaurantnetworkapp.Table;
 public class ServerApp {
 	private static final Logger logger 
 	= Logger.getLogger(ServerApp.class.getName());
-	private static final int numberOfTables = 12;
+	private static final int numberOfTables = 24;
 
 	private static Collection<Table> RestaurantTables()
 	{
