@@ -1,0 +1,59 @@
+syntax  = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.restaurantnetworkapp";
+option java_outer_classname = "RestaurantServiceProto";
+option objc_class_prefix = "RTG";
+
+package restaurant;
+
+service RestaurantService
+{
+	/* add a list of tables: Generally taken care by launching the server */
+	rpc setup (TableRecord) returns (stream Table) {}
+	/* add a table to the restaurant: Taken care by admin */
+	rpc add	(Table) returns (Response) {}
+	/* Make update on a table get back table record list */
+	rpc update (Table) returns (stream Table) {}
+	/* Request table record list on waiter request by refresh */
+	rpc tables (Response) returns (stream Table) {}
+	/* Send table order to the kitchen */
+	rpc order (Order) returns (Response) {}
+	/* Request order status by order id */
+	rpc status (Response) returns (Order) {}
+	/* Get orders in queue */
+	rpc orderqueue (Response) returns (stream Order) {}
+}
+
+message Response
+{
+	string message = 1;
+}
+
+message Table
+{
+  int64 tableID = 1;
+  enum TableState
+  {
+    CLEAN = 0;
+    TAKEN = 1;
+    DIRTY = 2;
+  }
+  TableState status = 2;
+
+}
+
+message Order
+{
+	int32 orderID = 1;
+	int64 orderNo = 2;
+	bool isReady = 3;
+	Table table = 4;
+	string message = 5;
+	map<string,string> order = 6;
+}
+
+message TableRecord
+{
+  repeated Table tbl  = 1;
+}
