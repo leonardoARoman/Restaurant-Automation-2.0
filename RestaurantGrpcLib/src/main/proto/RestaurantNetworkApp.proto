@@ -21,6 +21,8 @@ service RestaurantService
 	rpc order (Order) returns (Response) {}
 	/* Request order status by order id */
 	rpc status (Response) returns (Order) {}
+	/* Get orders in queue */
+	rpc orderqueue (Response) returns (stream Order) {}
 }
 
 message Response
@@ -47,7 +49,8 @@ message Order
 	int64 orderNo = 2;
 	bool isReady = 3;
 	Table table = 4;
-	map<string,string> order = 5;
+	string message = 5;
+	map<string,string> order = 6;
 }
 
 message TableRecord
