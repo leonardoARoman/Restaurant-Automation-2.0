@@ -1,13 +1,15 @@
 package com.example.waiterclient;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import com.example.APIs.DatabaseManager;
+import com.example.model.TableState;
 
 import java.util.ArrayList;
-
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.restaurantnetworkapp.Response;
@@ -16,19 +18,18 @@ import io.grpc.restaurantnetworkapp.Table;
 import io.grpc.stub.StreamObserver;
 
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
     private ArrayList<TableState> tables;
     private static String[] status = {"CLEAN","TAKEN","DIRTY"};
     private static int tableState = 0;
     private static String TAG = MainActivity.class.getSimpleName();
     private ManagedChannel channel;
+    private DatabaseManager db;
     String host = "10.0.0.107";
     int port = 8080;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         channel = ManagedChannelBuilder
@@ -51,12 +52,12 @@ public class MainActivity extends AppCompatActivity
         tables.add(new TableState((Button) findViewById(R.id.button_12),12));
     }
 
-    private void setState(Button btn1,TableState btn2){
-        if (btn2.getTableState()==1){
+    private void setState(Button btn1,TableState table){
+        if (table.getTableState()==1){
             Log.v(TAG,"MESSAGE: red ");
             btn1.setActivated(true);
             btn1.setPressed(false);
-        }else if (btn2.getTableState()==2){
+        }else if (table.getTableState()==2){
             Log.v(TAG,"MESSAGE: blue ");
             btn1.setSelected(true);
             btn1.setActivated(true);
@@ -66,20 +67,37 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Helper on click method called by any table button pressed by user.
+     * The Button that was pressed will be determined by its view id.
+     * @param view
+     */
     public void updateTable(View view)
     {
-        Button btn = (Button)findViewById(view.getId());
+        Button tableButton = (Button)findViewById(view.getId());// get the button that was pressed
         for (TableState table: tables){
-            if (btn.equals(table.getButton())){
-                table.changeState();
-                setState(btn,table);
+            // find the button pressed in our list of buttons to change to next state.
+            if (tableButton.equals(table.getButton())){
+                table.changeState();// changes button to next state.
+                setState(tableButton,table);// set button view to next color according to button state number
                 Log.v(TAG,"MESSAGE: table "+table.getTableNumber()+" is now "+status[table.getTableState()]);
-                tableState = table.getTableState();
+                tableState = table.getTableState();// get new table state to broadcast update
             }
         }
-        String btnStr = btn.getText().toString();
+
+        String btnStr = tableButton.getText().toString();
         String[] str = btnStr.split(" ");
         final int tableNo = Integer.parseInt(str[1]); // tables 1-12
+
+        tableButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(MainActivity.this.getBaseContext(),TakeOrder.class);
+                intent.putExtra("Table Number",tableNo);// current location
+                startActivity(intent);
+                return false;
+            }
+        });
 
         Table request = Table
                 .newBuilder()
@@ -95,7 +113,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onNext(Table value)
             {
-                Log.v(TAG,"MESSAGE: Table "+value.getTableID()+" is "+status[value.getStatusValue()]);
+                //Log.v(TAG,"MESSAGE: Table "+value.getTableID()+" is "+status[value.getStatusValue()]);
             }
 
             @Override
@@ -107,11 +125,16 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onCompleted()
             {
-                Log.v(TAG,"MESSAGE: Table "+tableNo+" updated.");
+                //Log.v(TAG,"MESSAGE: Table "+tableNo+" updated.");
             }
         });
     }
 
+    /**
+     * Helper on click button called by the refresh button. This will get list of all tables
+     * to determine if any table have change state from hostess app action.
+     * @param view
+     */
     public void getTableRecords(View view) {
         Log.v(TAG,"MESSAGE: refresh pressed ");
         Response request = Response

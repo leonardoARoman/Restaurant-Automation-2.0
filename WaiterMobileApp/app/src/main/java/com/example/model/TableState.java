@@ -1,4 +1,4 @@
-package com.example.waiterclient;
+package com.example.model;
 
 import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;

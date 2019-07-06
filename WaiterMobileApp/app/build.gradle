@@ -41,7 +41,8 @@ protobuf {
             task.plugins {
                 javalite {}
                 grpc { // Options added to --grpc_out
-                    option 'lite' }
+                    option 'lite'
+                }
             }
         }
     }
