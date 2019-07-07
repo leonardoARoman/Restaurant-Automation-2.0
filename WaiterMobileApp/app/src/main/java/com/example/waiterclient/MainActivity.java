@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.APIs.ChannelManager;
 import com.example.APIs.DatabaseManager;
 import com.example.model.TableState;
 
 import java.util.ArrayList;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.restaurantnetworkapp.Response;
 import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
 import io.grpc.restaurantnetworkapp.Table;
@@ -25,17 +26,12 @@ public class MainActivity extends AppCompatActivity {
     private static String TAG = MainActivity.class.getSimpleName();
     private ManagedChannel channel;
     private DatabaseManager db;
-    String host = "10.0.0.107";
-    int port = 8080;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        channel = ManagedChannelBuilder
-                .forAddress(host, port)
-                .usePlaintext(true)
-                .build();
+        channel = ChannelManager.getChannelManagerInstance().getChannel();
 
         tables = new ArrayList<TableState>();
         tables.add(new TableState((Button) findViewById(R.id.button_1),1));

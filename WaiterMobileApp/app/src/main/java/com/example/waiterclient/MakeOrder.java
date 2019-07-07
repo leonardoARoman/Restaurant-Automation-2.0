@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+
+import com.example.APIs.ChannelManager;
 import com.example.APIs.DatabaseManager;
 import com.example.adapter.OrderAdapter;
-import com.example.adapter.TableAdapter;
 import com.example.model.Dish;
 import com.example.model.TableOrder;
 import java.util.ArrayList;
@@ -30,18 +31,13 @@ public class MakeOrder extends AppCompatActivity {
     private TableOrder order;
     private static String TAG = MakeOrder.class.getSimpleName();
     private ManagedChannel channel;
-    String host = "10.0.0.107";
-    int port = 8080;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_order);
 
-        channel = ManagedChannelBuilder
-                .forAddress(host, port)
-                .usePlaintext(true)
-                .build();
+        channel = ChannelManager.getChannelManagerInstance().getChannel();
 
         dishes = findViewById(R.id.dishes);
         menu = new ArrayList<>();
