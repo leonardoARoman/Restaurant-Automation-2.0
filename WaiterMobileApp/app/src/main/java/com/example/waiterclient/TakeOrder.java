@@ -28,14 +28,13 @@ public class TakeOrder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_order);
 
-        int tableNo = (int) getIntent().getSerializableExtra("Table Number");
-        if (tableNo!=0){
-            order = new TableOrder(tableNo);
-        }
+        int tableNo = (int) getIntent().getSerializableExtra("Table Number");// Get table number and start a new order with respect to the table number.
+        if (tableNo!=0){ order = new TableOrder(tableNo); }// Order has been made for table X
+
         gridView = findViewById(R.id.itemingridView);
         db = new DatabaseManager(this);
         menu = db.getMenu();
 
-        gridView.setAdapter(new TableAdapter(TakeOrder.this,menu,images,order));
+        gridView.setAdapter(new TableAdapter(TakeOrder.this,menu,images,order));// Set activity view with costumed adapter TableAdadpter by passing the menu options, images and the order in process
     }
 }

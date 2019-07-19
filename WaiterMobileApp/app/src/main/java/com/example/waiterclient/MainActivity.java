@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         channel = ChannelManager.getChannelManagerInstance().getChannel();
-
+        db = new DatabaseManager(this);
         tables = new ArrayList<TableState>();
         tables.add(new TableState((Button) findViewById(R.id.button_1),1));
         tables.add(new TableState((Button) findViewById(R.id.button_2),2));
@@ -85,10 +85,14 @@ public class MainActivity extends AppCompatActivity {
         String[] str = btnStr.split(" ");
         final int tableNo = Integer.parseInt(str[1]); // tables 1-12
 
+        /**
+         * Hold button pressed to take table's order.
+         */
         tableButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(MainActivity.this.getBaseContext(),TakeOrder.class);
+                // Pass table number to the next activity to make order with table number
                 intent.putExtra("Table Number",tableNo);// current location
                 startActivity(intent);
                 return false;

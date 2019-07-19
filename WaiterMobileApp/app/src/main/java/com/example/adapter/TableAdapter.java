@@ -57,8 +57,8 @@ public class TableAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity.getBaseContext(), MakeOrder.class);
-                intent.putExtra("option",menu.get(position));
-                intent.putExtra("order",order);
+                intent.putExtra("option",menu.get(position));// pass the menu option clicked by user to access correct table in database and get dishes.
+                intent.putExtra("order",order);// pass the order in process to add any dishes selected from the option menu.
                 activity.startActivity(intent);
             }
         });
