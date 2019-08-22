@@ -33,6 +33,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	private static Collection<Order> orderRecord;
 	private static Map<Integer,Order> orderIDs;
 	private static Queue<Order> orderQuee;
+	private static Collection<Order> orderList;
 	//private static String DB = "./src/main/database/RestaurantDB.db";
 	private static String URL = "./src/main/database/tableRecord.dat";
 	//private static String URL = "./database/tableRecord.dat";
@@ -40,10 +41,11 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 
 	private ServiceStub() 
 	{
-		tableRecord = new ArrayList<Table>();
-		orderRecord = new ArrayList<Order>();
-		orderIDs = new HashMap<Integer,Order>();
-		orderQuee = new LinkedList<Order>();
+		tableRecord = new ArrayList<Table>();		// For table inventory
+		orderRecord = new ArrayList<Order>();		// For record storage
+		orderIDs = new HashMap<Integer,Order>();	// For quick access transaction
+		orderList = new ArrayList<Order>();			// To display in kitchen monitors
+		orderQuee = new LinkedList<Order>();		// To remove from queue and update orderlist
 	}
 
 	private ServiceStub(Collection<Table> tableRecord)
@@ -51,6 +53,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		this.tableRecord = tableRecord;
 		orderRecord = new ArrayList<Order>();
 		orderIDs = new HashMap<Integer,Order>();
+		orderList = new ArrayList<Order>();
 		orderQuee = new LinkedList<Order>();
 	}
 
@@ -165,6 +168,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			orderIDs.put(order.getOrderID(),order);
 			orderQuee.add(order);
 			orderRecord.add(order);
+			orderList.add(order);
 			response = Response
 					.newBuilder()
 					.setMessage("Order number "+order.getOrderNo()+" is inqueue.")
@@ -183,8 +187,12 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	@Override
 	public void orderqueue(Response request,
 			StreamObserver<Order> responseObserver) {
-		Object[] orders = orderQuee.toArray();
-		for(Object o: orders) { responseObserver.onNext((Order)o); }
+		if(request.getMessage().equals("remove")) {
+			Order order = orderQuee.remove();
+			//To do: notify waiter after removing order. It means order is ready
+			orderList.remove(order);
+		}
+		for(Object o: orderList) { responseObserver.onNext((Order)o); }
 		
 		responseObserver.onCompleted();
 	}

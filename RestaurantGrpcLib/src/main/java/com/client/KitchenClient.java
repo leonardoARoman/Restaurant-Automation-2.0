@@ -77,7 +77,7 @@ public class KitchenClient {
 		KitchenClient clientStub = new KitchenClient("192.168.1.11",8080);
 
 		Table table;
-		/*for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < 5; i++) {
 			table = Table
 					.newBuilder()
 					.setTableID(i)
@@ -94,8 +94,8 @@ public class KitchenClient {
 					.putOrder("Poter House", "Medium Raer")
 					.build();
 			clientStub.postOrder(order);
-		}*/
-		Order order = Order
+		}
+		/*Order order = Order
 				.newBuilder()
 				.setOrderID(0)
 				.setOrderNo(0)
@@ -104,7 +104,7 @@ public class KitchenClient {
 				.setMessage(0+": Poter House, Medium Raer")
 				.putOrder("Poter House", "Medium Raer")
 				.build();
-		clientStub.postOrder(order);
+		clientStub.postOrder(order);*/
 
 		System.out.println("\n");
 		logger.info("Orders in queue.");
