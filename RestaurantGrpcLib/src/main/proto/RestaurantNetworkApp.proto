@@ -23,6 +23,8 @@ service RestaurantService
 	rpc status (Response) returns (Order) {}
 	/* Get orders in queue */
 	rpc orderqueue (Response) returns (stream Order) {}
+	/* Send order stream and publish the dishes to respective kitchen monitor */
+	rpc orderStream (stream MakeOrder) returns (stream Dish) {}
 }
 
 message Response
@@ -42,6 +44,20 @@ message Table
   TableState status = 2;
 
 }
+
+message Dish
+{
+	int32	id		= 1;
+	string	name	= 2;
+	string	comment	= 3;
+	bool	isReady	= 4;	 
+}	
+
+message MakeOrder
+{
+	int32		number	= 1;
+	repeated	Dish	= 2;
+}	
 
 message Order
 {
