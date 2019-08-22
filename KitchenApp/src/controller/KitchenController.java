@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 public class KitchenController {
 
 	private static Stage stage;
+	private ArrayList<Order> orders;
 	private ObservableList<String> hotLineObsList1,hotLineObsleList2,hotLineObsList3,hotLineObsList4,saladLineObsList1,saladLineObsList2;
 	private static KitchenClient clientSub;
 	private static final Logger logger = Logger.getLogger(KitchenController.class.getName());
@@ -40,7 +41,7 @@ public class KitchenController {
 	}
 
 	public void register2() {
-		ArrayList<Order> orders = clientSub.getOrdersInQueue();
+		orders = clientSub.getOrdersInQueue();
 		ArrayList<String> list = new ArrayList<String>();
 		for(Order o: orders) {
 			list.add(o.getMessage());
