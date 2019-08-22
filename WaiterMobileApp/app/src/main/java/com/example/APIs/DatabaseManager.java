@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,8 +32,10 @@ public class DatabaseManager extends SQLiteOpenHelper {
             inputStream.read(buffer);
             String ddl = new String(buffer);
             queries = ddl.split(";");
+            for (String query: queries){ db.execSQL(query); }
         } catch (IOException e) {
             e.printStackTrace();
+            Log.v(TAG,"MESSAGE: Error caught "+e.getMessage());
         }
     }
 
