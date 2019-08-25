@@ -7,20 +7,25 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
+import io.grpc.restaurantnetworkapp.Dish;
+import io.grpc.restaurantnetworkapp.MakeOrder;
 import io.grpc.restaurantnetworkapp.Order;
 import io.grpc.restaurantnetworkapp.Response;
 import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
+
+import com.google.common.base.Optional;
 import com.service.ServiceStub;
 import io.grpc.restaurantnetworkapp.Table;
 import io.grpc.restaurantnetworkapp.TableRecord;
-import io.grpc.stub.StreamObserver;
 import io.grpc.stub.StreamObserver;
 
 public class ServiceStub extends 
@@ -38,6 +43,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	//private static String URL = "./database/tableRecord.dat";
 	private static String URL2 = "./src/main/database/orderRecord.dat";
 
+	///////////////////////////////////////////////////////////////////////////////////////
+	// Constructors
+	///////////////////////////////////////////////////////////////////////////////////////
 	private ServiceStub() 
 	{
 		tableRecord = new ArrayList<Table>();
@@ -53,7 +61,11 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		orderIDs = new HashMap<Integer,Order>();
 		orderQuee = new LinkedList<Order>();
 	}
-
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
 	public static ServiceStub getInstance() throws IOException 
 	{
 		if(instance==null) 
@@ -62,7 +74,12 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		}
 		return instance;
 	}
-
+	/**
+	 * 
+	 * @param tableRecord
+	 * @return
+	 * @throws IOException
+	 */
 	public static ServiceStub getInstance(Collection<Table> tableRecord) throws IOException 
 	{
 		if(instance==null) 
@@ -79,6 +96,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		return instance;
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////
+	// setup: not being used
+	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void setup(TableRecord tablerecord, 
 			StreamObserver<Table> responseObserver) 
@@ -86,6 +106,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		responseObserver.onCompleted();
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////
+	// add: To add tables to the restaurant
+	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void add(Table table,
 			StreamObserver<Response> responseObserver) 
@@ -99,42 +122,47 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			e.printStackTrace();
 		}
 
-		Response response = Response
+		responseObserver.onNext(Response
 				.newBuilder()
 				.setMessage("Table "+table.getTableID()+" added to Restaurant record")
-				.build();
-		responseObserver.onNext(response);
+				.build());
+		
 		responseObserver.onCompleted();
 	}
-
+	
+	///////////////////////////////////////////////////////////////////////////////////////
+	// update: Updates the state of a given table; Clean, Taken or Dirty
+	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void update(Table tableUpdate, 
 			StreamObserver<Table> responseObserver) 
 	{
-		for(Table table: tableRecord) 
-		{
-			if(table.getTableID()==tableUpdate.getTableID())
+		Table table = tableRecord
+				.stream()
+				.filter(t->t.getTableID()==tableUpdate.getTableID())
+				.findFirst()
+				.orElse(null);
+		
+		if(!table.equals(null)) {
+			tableRecord.remove(table);
+			tableRecord.add(tableUpdate);	
+			try 
 			{
-				tableRecord.remove(table);
-				tableRecord.add(tableUpdate);
-				break;
+				updateTableRecord();
+			} catch (IOException e) 
+			{
+				e.printStackTrace();
 			}
 		}
-		try 
-		{
-			updateTableRecord();
-		} catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		for(Table table: tableRecord) 
-		{ 
-			responseObserver.onNext(table); 
-		}
+		
+		tableRecord.forEach(t->responseObserver.onNext(t));
 
 		responseObserver.onCompleted();
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////
+	// tables: 
+	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void tables(Response request,
 			StreamObserver<Table> responseObserver) {
@@ -142,7 +170,10 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 
 		responseObserver.onCompleted();
 	}
-	
+
+	///////////////////////////////////////////////////////////////////////////////////////
+	// Constructors
+	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void order(Order order, 
 			StreamObserver<Response> responseObserver) {
@@ -156,7 +187,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			// Add new order in argument.
 			orderRecord.add(order);
 			orderIDs.put(order.getOrderID(),order);
-			
+
 			response = Response
 					.newBuilder()
 					.setMessage("Order number "+order.getOrderNo()+" is ready.")
@@ -180,15 +211,21 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		responseObserver.onCompleted();
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////
+	// Constructors
+	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void orderqueue(Response request,
 			StreamObserver<Order> responseObserver) {
 		Object[] orders = orderQuee.toArray();
 		for(Object o: orders) { responseObserver.onNext((Order)o); }
-		
+
 		responseObserver.onCompleted();
 	}
-	
+
+	///////////////////////////////////////////////////////////////////////////////////////
+	// Constructors
+	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void status(Response request, 
 			StreamObserver<Order> responseObserver) 
@@ -221,6 +258,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		}
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////
+	// Constructors
+	///////////////////////////////////////////////////////////////////////////////////////
 	private static void saveOrder() throws IOException 
 	{
 		ObjectOutputStream outputStream = null;
@@ -242,6 +282,10 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 				outputStream.close();
 			}
 		}
+	}
+	public StreamObserver<MakeOrder> orderstream(StreamObserver<Dish> responseObserver)
+	{
+		return null;
 	}
 	/*
 	private Collection<Table> deserialize() throws IOException, ClassNotFoundException
