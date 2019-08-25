@@ -153,10 +153,8 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			{
 				e.printStackTrace();
 			}
+			tableRecord.forEach(t->responseObserver.onNext(t));
 		}
-		
-		tableRecord.forEach(t->responseObserver.onNext(t));
-
 		responseObserver.onCompleted();
 	}
 
