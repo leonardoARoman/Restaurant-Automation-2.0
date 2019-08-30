@@ -48,6 +48,15 @@
 		</extensions>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.xolstice.maven.plugins</groupId>
 				<artifactId>protobuf-maven-plugin</artifactId>
 				<version>0.5.1</version>
@@ -88,88 +97,26 @@
 							<finalName>ServiceStub</finalName>
 						</configuration>
 					</execution>
-					<!--
-					<execution>
-						<id>build-first</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.client.HostClient</mainClass>
-								</transformer>
-							</transformers>
-							<finalName>HostClient</finalName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>build-second</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.client.WaiterClient</mainClass>
-								</transformer>
-							</transformers>
-							<finalName>WaiterClient</finalName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>build-third</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.service.RestaurantServer</mainClass>
-								</transformer>
-							</transformers>
-							<finalName>AppTest</finalName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>build-fourth</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.service.ServerInterceptorHandler</mainClass>
-								</transformer>
-							</transformers>
-							<finalName>ServerInterceptorHandler</finalName>
-						</configuration>
-					</execution>
-					<execution>
-						<id>build-sixth</id>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.client.KitchenClient</mainClass>
-								</transformer>
-							</transformers>
-							<finalName>KitchenClient</finalName>
-						</configuration>
-					</execution>
-					-->
+					<!-- <execution> <id>build-first</id> <phase>package</phase> <goals> 
+						<goal>shade</goal> </goals> <configuration> <transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
+						<mainClass>com.client.HostClient</mainClass> </transformer> </transformers> 
+						<finalName>HostClient</finalName> </configuration> </execution> <execution> 
+						<id>build-second</id> <phase>package</phase> <goals> <goal>shade</goal> </goals> 
+						<configuration> <transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
+						<mainClass>com.client.WaiterClient</mainClass> </transformer> </transformers> 
+						<finalName>WaiterClient</finalName> </configuration> </execution> <execution> 
+						<id>build-third</id> <phase>package</phase> <goals> <goal>shade</goal> </goals> 
+						<configuration> <transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
+						<mainClass>com.service.RestaurantServer</mainClass> </transformer> </transformers> 
+						<finalName>AppTest</finalName> </configuration> </execution> <execution> 
+						<id>build-fourth</id> <phase>package</phase> <goals> <goal>shade</goal> </goals> 
+						<configuration> <transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
+						<mainClass>com.service.ServerInterceptorHandler</mainClass> </transformer> 
+						</transformers> <finalName>ServerInterceptorHandler</finalName> </configuration> 
+						</execution> <execution> <id>build-sixth</id> <phase>package</phase> <goals> 
+						<goal>shade</goal> </goals> <configuration> <transformers> <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> 
+						<mainClass>com.client.KitchenClient</mainClass> </transformer> </transformers> 
+						<finalName>KitchenClient</finalName> </configuration> </execution> -->
 				</executions>
 			</plugin>
 		</plugins>

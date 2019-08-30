@@ -1,5 +1,8 @@
 package com.service;
 
+import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
+import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -55,10 +58,13 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		orderList = new ArrayList<Order>();			// To display in kitchen monitors
 		orderQuee = new LinkedList<Order>();		// To remove from queue and update orderlist
 	}
-
+	/**
+	 * 
+	 * @param tableRecord
+	 */
 	private ServiceStub(Collection<Table> tableRecord)
 	{
-		this.tableRecord = tableRecord;
+		ServiceStub.tableRecord = tableRecord;
 		orderRecord = new ArrayList<Order>();
 		orderIDs = new HashMap<Integer,Order>();
 		orderList = new ArrayList<Order>();
@@ -79,9 +85,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 	/**
 	 * 
-	 * @param tableRecord
+	 * @param tableRecord List of tables at ready state for boot up
 	 * @return
-	 * @throws IOException
+	 * @throws IOException Empty container
 	 */
 	public static ServiceStub getInstance(Collection<Table> tableRecord) throws IOException 
 	{
@@ -110,6 +116,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
+	// @Admin
 	// add: To add tables to the restaurant
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
@@ -129,11 +136,12 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 				.newBuilder()
 				.setMessage("Table "+table.getTableID()+" added to Restaurant record")
 				.build());
-		
+
 		responseObserver.onCompleted();
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////////////////
+	// @Clients
 	// update: Updates the state of a given table; Clean, Taken or Dirty
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
@@ -145,7 +153,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 				.filter(t->t.getTableID()==tableUpdate.getTableID())
 				.findFirst()
 				.orElse(null);
-		
+
 		if(!table.equals(null)) {
 			tableRecord.remove(table);
 			tableRecord.add(tableUpdate);	
@@ -162,6 +170,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
+	// @Clients
 	// tables: 
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
@@ -173,7 +182,36 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	// Constructors
+	// @Clients
+	// tables: 
+	///////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public StreamObserver<MakeOrder> orderstream(StreamObserver<Dish> responseObserver) {
+		return new StreamObserver<MakeOrder>() {
+
+			@Override
+			public void onNext(MakeOrder value) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onError(Throwable t) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onCompleted() {
+				// TODO Auto-generated method stub
+
+			}
+
+		};
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////
+	// ToDo: delete this once orderstream is implemented. 
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void order(Order order, 
@@ -214,7 +252,8 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	// Constructors
+	// @Clients: Kitchen
+	// orderqueue: Removed order from queue once ready
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void orderqueue(Response request,
@@ -230,7 +269,8 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	// Constructors
+	// @Clients: Admin, Waiter, Host
+	// status: returns the state of a given order
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void status(Response request, 
@@ -265,7 +305,8 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	// Constructors
+	// Program helper method to save order records
+	// private!
 	///////////////////////////////////////////////////////////////////////////////////////
 	private static void saveOrder() throws IOException 
 	{
@@ -288,10 +329,6 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 				outputStream.close();
 			}
 		}
-	}
-	public StreamObserver<MakeOrder> orderstream(StreamObserver<Dish> responseObserver)
-	{
-		return null;
 	}
 	/*
 	private Collection<Table> deserialize() throws IOException, ClassNotFoundException
