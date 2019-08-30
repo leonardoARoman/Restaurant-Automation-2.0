@@ -24,7 +24,7 @@ service RestaurantService
 	/* Get orders in queue */
 	rpc orderqueue (Response) returns (stream Order) {}
 	/* Send order stream and publish the dishes to respective kitchen monitor */
-	rpc orderStream (stream MakeOrder) returns (stream Dish) {}
+	rpc orderstream (stream MakeOrder) returns (stream Dish) {}
 }
 
 message Response
@@ -55,8 +55,8 @@ message Dish
 
 message MakeOrder
 {
-	int32		number	= 1;
-	repeated	Dish	= 2;
+	int32			number	= 1;
+	repeated Dish	dishes	= 2;
 }	
 
 message Order
