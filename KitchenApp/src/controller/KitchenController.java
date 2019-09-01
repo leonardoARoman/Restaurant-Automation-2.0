@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 import com.client.KitchenClient;
 
 import io.grpc.restaurantnetworkapp.Order;
+import io.grpc.restaurantnetworkapp.SendOrder;
+import io.grpc.stub.StreamObserver;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -38,6 +40,7 @@ public class KitchenController {
 
 	public void register1() {
 		
+		//StreamObserver observer = new StreamObserver<SendOrder>();
 	}
 
 	public void register2() {

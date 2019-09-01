@@ -13,13 +13,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-import io.grpc.restaurantnetworkapp.Dish;
+import io.grpc.restaurantnetworkapp.SendOrder;
 import io.grpc.restaurantnetworkapp.MakeOrder;
 import io.grpc.restaurantnetworkapp.Order;
 import io.grpc.restaurantnetworkapp.Response;
@@ -36,6 +38,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 {
 
 	private static final Logger logger = Logger.getLogger(ServiceStub.class.getName());
+	private static LinkedHashSet<StreamObserver<SendOrder>> dishes;
 	private static ServiceStub instance;
 	private static Collection<Table> tableRecord;
 	private static Collection<Order> orderRecord;
@@ -52,11 +55,12 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	///////////////////////////////////////////////////////////////////////////////////////
 	private ServiceStub() 
 	{
+		dishes 		= new LinkedHashSet<>();
 		tableRecord = new ArrayList<Table>();		// For table inventory
 		orderRecord = new ArrayList<Order>();		// For record storage
-		orderIDs = new HashMap<Integer,Order>();	// For quick access transaction
-		orderList = new ArrayList<Order>();			// To display in kitchen monitors
-		orderQuee = new LinkedList<Order>();		// To remove from queue and update orderlist
+		orderIDs 	= new HashMap<Integer,Order>();	// For quick access transaction
+		orderList 	= new ArrayList<Order>();			// To display in kitchen monitors
+		orderQuee 	= new LinkedList<Order>();		// To remove from queue and update orderlist
 	}
 	/**
 	 * 
@@ -65,10 +69,11 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	private ServiceStub(Collection<Table> tableRecord)
 	{
 		ServiceStub.tableRecord = tableRecord;
-		orderRecord = new ArrayList<Order>();
-		orderIDs = new HashMap<Integer,Order>();
-		orderList = new ArrayList<Order>();
-		orderQuee = new LinkedList<Order>();
+		dishes 					= new LinkedHashSet<>();
+		orderRecord 			= new ArrayList<Order>();
+		orderIDs 				= new HashMap<Integer,Order>();
+		orderList 				= new ArrayList<Order>();
+		orderQuee 				= new LinkedList<Order>();
 	}
 	/**
 	 * 
@@ -186,13 +191,17 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	// tables: 
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public StreamObserver<MakeOrder> orderstream(StreamObserver<Dish> responseObserver) {
+	public StreamObserver<MakeOrder> orderstream(StreamObserver<SendOrder> responseObserver) {
+		dishes.add(responseObserver);
 		return new StreamObserver<MakeOrder>() {
-
 			@Override
 			public void onNext(MakeOrder value) {
-				// TODO Auto-generated method stub
-
+				dishes
+				.stream()
+				.forEach(o->responseObserver.onNext(SendOrder
+						.newBuilder()
+						.setOrder(value)
+						.build()));
 			}
 
 			@Override
@@ -209,7 +218,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 
 		};
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////////////////
 	// ToDo: delete this once orderstream is implemented. 
 	///////////////////////////////////////////////////////////////////////////////////////

@@ -14,6 +14,8 @@ public class KitchenClient {
 	private static final Logger logger = Logger.getLogger(HostClient.class.getName());
 	private final ManagedChannel channel;
 	private final RestaurantServiceGrpc.RestaurantServiceBlockingStub blockingStub;
+	private static RestaurantServiceGrpc.RestaurantServiceStub newStub;
+	
 	private static String[] status = {"CLEAN","TAKEN","DIRTY"};
 
 	public KitchenClient(String host, int port) 
@@ -29,8 +31,13 @@ public class KitchenClient {
 	{
 		this.channel = channel;
 		blockingStub = RestaurantServiceGrpc.newBlockingStub(channel);
+		newStub = RestaurantServiceGrpc.newStub(channel);
 	}
 
+	public static RestaurantServiceGrpc.RestaurantServiceStub stub(){
+		return newStub;
+	}
+	
 	public void postOrder(Order order)
 	{
 		Response response = blockingStub.order(order);
