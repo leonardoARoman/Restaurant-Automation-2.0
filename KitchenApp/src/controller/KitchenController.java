@@ -39,8 +39,27 @@ public class KitchenController {
 	}
 
 	public void register1() {
-		
-		//StreamObserver observer = new StreamObserver<SendOrder>();
+		KitchenClient.stub().orderstream(new StreamObserver<SendOrder>() {
+
+			@Override
+			public void onCompleted() {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onError(Throwable arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onNext(SendOrder arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 	}
 
 	public void register2() {
