@@ -27,13 +27,13 @@ public class KitchenController {
 
 	private static Stage stage;
 	private ArrayList<Order> orders;
-	private ObservableList<String> hotLineObsList1,hotLineObsleList2,hotLineObsList3,hotLineObsList4,saladLineObsList1,saladLineObsList2;
+	private ObservableList<String> hotLineObsList1;
 	//private static KitchenClient clientSub;
 	private static final Logger logger = Logger.getLogger(KitchenController.class.getName());
 	private RestaurantServiceGrpc.RestaurantServiceStub orderStream;
 
 	@FXML
-	private ListView<String> orderList1,orderList2,orderList3,orderList4,saladOrderList1,saladOrderList2;
+	private ListView<String> orderList1;
 
 	/**
 	 * 
@@ -42,24 +42,21 @@ public class KitchenController {
 	public void start(Stage mainStage) {
 		orderStream = RestaurantServiceGrpc
 				.newStub(ManagedChannelBuilder.forAddress("192.168.1.2", 8080)
-				.usePlaintext()
-				.build());
-		
-		stage = mainStage;
-	}
+						.usePlaintext()
+						.build());
 
-	public void register1() {
-		orderStream.orderstream(new StreamObserver<SendOrder>() {
+		stage = mainStage;
+		/*orderStream.orderstream(new StreamObserver<SendOrder>() {
 			@Override
 			public void onNext(SendOrder order) {
 				// TODO Auto-generated method stub
-				/*List<Dish> dishes = order.getOrder().getDishesList();
+				List<Dish> dishes = order.getOrder().getDishesList();
 				Platform.runLater(()->{
 					ArrayList<String> list = new ArrayList<String>();
 					dishes.forEach(d->list.add(d.getName()));
 					hotLineObsleList2 = FXCollections.observableArrayList(list);
 					orderList2.setItems(hotLineObsleList2);	
-				});*/
+				});
 			}
 			@Override
 			public void onError(Throwable arg0) {
@@ -71,32 +68,6 @@ public class KitchenController {
 				// TODO Auto-generated method stub
 
 			}
-		});
-	}
-
-	public void register2() {
-		/*orders = clientSub.getOrdersInQueue();
-		ArrayList<String> list = new ArrayList<String>();
-		for(Order o: orders) {
-			list.add(o.getMessage());
-		}
-		hotLineObsList1 = FXCollections.observableArrayList(list);
-		orderList1.setItems(hotLineObsList1);*/
-	}
-
-	public void register3() {
-
-	}
-
-	public void register4() {
-
-	}
-
-	public void register5() {
-
-	}
-
-	public void register6() {
-
+		});*/
 	}
 }
