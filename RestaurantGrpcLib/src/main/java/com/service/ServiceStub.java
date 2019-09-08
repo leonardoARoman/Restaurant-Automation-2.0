@@ -55,7 +55,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	///////////////////////////////////////////////////////////////////////////////////////
 	private ServiceStub() 
 	{
-		dishes 		= new LinkedHashSet<>();
+		dishes 		= new LinkedHashSet<StreamObserver<SendOrder>>();
 		tableRecord = new ArrayList<Table>();		// For table inventory
 		orderRecord = new ArrayList<Order>();		// For record storage
 		orderIDs 	= new HashMap<Integer,Order>();	// For quick access transaction
@@ -69,7 +69,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	private ServiceStub(Collection<Table> tableRecord)
 	{
 		ServiceStub.tableRecord = tableRecord;
-		dishes 					= new LinkedHashSet<>();
+		dishes 					= new LinkedHashSet<StreamObserver<SendOrder>>();
 		orderRecord 			= new ArrayList<Order>();
 		orderIDs 				= new HashMap<Integer,Order>();
 		orderList 				= new ArrayList<Order>();
@@ -196,26 +196,21 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		return new StreamObserver<MakeOrder>() {
 			@Override
 			public void onNext(MakeOrder value) {
-				dishes
-				.stream()
+				System.out.println(value);
+				dishes.stream()
 				.forEach(o->responseObserver.onNext(SendOrder
 						.newBuilder()
 						.setOrder(value)
 						.build()));
 			}
-
 			@Override
 			public void onError(Throwable t) {
 				// TODO Auto-generated method stub
-
 			}
-
 			@Override
 			public void onCompleted() {
 				// TODO Auto-generated method stub
-
 			}
-
 		};
 	}
 
