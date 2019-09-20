@@ -59,12 +59,12 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		tableRecord = new ArrayList<Table>();		// For table inventory
 		orderRecord = new ArrayList<Order>();		// For record storage
 		orderIDs 	= new HashMap<Integer,Order>();	// For quick access transaction
-		orderList 	= new ArrayList<Order>();			// To display in kitchen monitors
+		orderList 	= new ArrayList<Order>();		// To display in kitchen monitors
 		orderQuee 	= new LinkedList<Order>();		// To remove from queue and update orderlist
 	}
 	/**
 	 * 
-	 * @param tableRecord
+	 * @param tableRecord list of tables to configure at boot up state
 	 */
 	private ServiceStub(Collection<Table> tableRecord)
 	{
@@ -77,7 +77,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 	/**
 	 * 
-	 * @return
+	 * @return singleton of type ServiceStub
 	 * @throws IOException
 	 */
 	public static ServiceStub getInstance() throws IOException 
@@ -91,7 +91,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	/**
 	 * 
 	 * @param tableRecord List of tables at ready state for boot up
-	 * @return
+	 * @return singleton of type ServiceStub with tables configured at instantiation
 	 * @throws IOException Empty container
 	 */
 	public static ServiceStub getInstance(Collection<Table> tableRecord) throws IOException 
@@ -146,7 +146,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	// @Clients
+	// @Clients -Admin
 	// update: Updates the state of a given table; Clean, Taken or Dirty
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
@@ -175,8 +175,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	// @Clients
-	// tables: 
+	// @Clients -Admin, Waiter, Hostess
+	// @Param request -input request
+	// @Param responseObserver -returns an observer to stream all tables
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void tables(Response request,
@@ -187,8 +188,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	// @Clients
-	// tables: 
+	// Clients -Kitchen, Waiter
+	// bidirectional streaming to send orders to kitchen monitors
+	// @Param responseObserver - observers registered to get SendOrder streaming
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public StreamObserver<MakeOrder> orderstream(StreamObserver<SendOrder> responseObserver) {
@@ -197,8 +199,10 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			@Override
 			public void onNext(MakeOrder value) {
 				System.out.println(value);
-				dishes.stream()
-				.forEach(o->responseObserver.onNext(SendOrder
+				
+				//System.out.println(value);
+				dishes
+				.forEach(o->o.onNext(SendOrder
 						.newBuilder()
 						.setOrder(value)
 						.build()));
