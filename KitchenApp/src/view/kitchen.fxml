@@ -21,7 +21,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="172.0" prefWidth="511.0">
                <children>
-                  <Button layoutX="230.0" layoutY="15.0" mnemonicParsing="false" text="Clear" />
+                  <Button layoutX="230.0" layoutY="15.0" mnemonicParsing="false" onAction="#clearMonitor" text="Clear" />
                </children>
             </AnchorPane>
         </items>
