@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import io.grpc.restaurantnetworkapp.RecievedOrder;
 import io.grpc.restaurantnetworkapp.Order;
+import io.grpc.restaurantnetworkapp.ReceivedTable;
 import io.grpc.restaurantnetworkapp.Response;
 import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
 import io.grpc.restaurantnetworkapp.SendOrder;
@@ -28,7 +29,8 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 {
 
 	private static final Logger logger = Logger.getLogger(ServiceStub.class.getName());
-	private static LinkedHashSet<StreamObserver<RecievedOrder>> dishes;
+	private static LinkedHashSet<StreamObserver<RecievedOrder>> dishObservers;
+	private static LinkedHashSet<StreamObserver<ReceivedTable>> tableObservers;
 	private static ServiceStub instance;
 	private static Collection<Table> tableRecord;
 	private static Collection<Order> orderRecord;
@@ -45,12 +47,13 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	///////////////////////////////////////////////////////////////////////////////////////
 	private ServiceStub() 
 	{
-		dishes 		= new LinkedHashSet<StreamObserver<RecievedOrder>>();
-		tableRecord = new ArrayList<Table>();		// For table inventory
-		orderRecord = new ArrayList<Order>();		// For record storage
-		orderIDs 	= new HashMap<Integer,Order>();	// For quick access transaction
-		orderList 	= new ArrayList<Order>();		// To display in kitchen monitors
-		orderQuee 	= new LinkedList<Order>();		// To remove from queue and update orderlist
+		dishObservers 	= new LinkedHashSet<StreamObserver<RecievedOrder>>();
+		tableObservers	= new LinkedHashSet<StreamObserver<ReceivedTable>>();
+		tableRecord 	= new ArrayList<Table>();		// For table inventory
+		orderRecord 	= new ArrayList<Order>();		// For record storage
+		orderIDs 		= new HashMap<Integer,Order>();	// For quick access transaction
+		orderList 		= new ArrayList<Order>();		// To display in kitchen monitors
+		orderQuee 		= new LinkedList<Order>();		// To remove from queue and update orderlist
 	}
 	/**
 	 * 
@@ -59,7 +62,8 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	private ServiceStub(Collection<Table> tableRecord)
 	{
 		ServiceStub.tableRecord = tableRecord;
-		dishes 					= new LinkedHashSet<StreamObserver<RecievedOrder>>();
+		dishObservers			= new LinkedHashSet<StreamObserver<RecievedOrder>>();
+		tableObservers			= new LinkedHashSet<StreamObserver<ReceivedTable>>();
 		orderRecord 			= new ArrayList<Order>();
 		orderIDs 				= new HashMap<Integer,Order>();
 		orderList 				= new ArrayList<Order>();
@@ -105,8 +109,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void setup(TableRecord tablerecord, 
-			StreamObserver<Table> responseObserver) 
-	{
+			StreamObserver<Table> responseObserver) {
 		responseObserver.onCompleted();
 	}
 
@@ -116,8 +119,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void add(Table table,
-			StreamObserver<Response> responseObserver) 
-	{
+			StreamObserver<Response> responseObserver) {
 		tableRecord.add(table);
 		try 
 		{
@@ -140,28 +142,42 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	// update: Updates the state of a given table; Clean, Taken or Dirty
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public void update(Table tableUpdate, 
-			StreamObserver<Table> responseObserver) 
-	{
-		Table table = tableRecord
-				.stream()
-				.filter(t->t.getTableID()==tableUpdate.getTableID())
-				.findFirst()
-				.orElse(null);
-
-		if(!table.equals(null)) {
-			tableRecord.remove(table);
-			tableRecord.add(tableUpdate);	
-			try 
-			{
-				updateTableRecord();
-			} catch (IOException e) 
-			{
-				e.printStackTrace();
+	public StreamObserver<Table> updatetable(StreamObserver<ReceivedTable> responseObserver) {
+		tableObservers.add(responseObserver);
+		return new StreamObserver<Table>() {
+			@Override
+			public void onNext(Table value) {
+				System.out.println(value);	
+				Table table = tableRecord
+						.stream()
+						.filter(t->t.getTableID()==value.getTableID())
+						.findFirst()
+						.orElse(null);
+				if(!table.equals(null)) {
+					tableRecord.remove(table);
+					tableRecord.add(value);	
+					try {
+						updateTableRecord();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					//tableRecord.forEach(t->responseObserver.onNext(t));
+				}
+				tableObservers
+				.forEach(o->o.onNext(ReceivedTable
+						.newBuilder()
+						.setTable(value)
+						.build()));
 			}
-			tableRecord.forEach(t->responseObserver.onNext(t));
-		}
-		responseObserver.onCompleted();
+			@Override
+			public void onError(Throwable t) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void onCompleted() {
+				// TODO Auto-generated method stub
+			}
+		};		
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -184,14 +200,14 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public StreamObserver<SendOrder> orderstream(StreamObserver<RecievedOrder> responseObserver) {
-		dishes.add(responseObserver);
+		dishObservers.add(responseObserver);
 		return new StreamObserver<SendOrder>() {
 			@Override
 			public void onNext(SendOrder value) {
 				System.out.println(value);
-				
+
 				//System.out.println(value);
-				dishes
+				dishObservers
 				.forEach(o->o.onNext(RecievedOrder
 						.newBuilder()
 						.setOrder(value)

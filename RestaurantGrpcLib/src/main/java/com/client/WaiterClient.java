@@ -38,7 +38,7 @@ public class WaiterClient {
 				.build();
 		try 
 		{
-			response = blockingStub.update(table);
+			//response = blockingStub.update(table);
 		} 
 		catch (StatusRuntimeException e) 
 		{
