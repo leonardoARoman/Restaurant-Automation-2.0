@@ -21,11 +21,11 @@ import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-import io.grpc.restaurantnetworkapp.SendOrder;
-import io.grpc.restaurantnetworkapp.MakeOrder;
+import io.grpc.restaurantnetworkapp.RecievedOrder;
 import io.grpc.restaurantnetworkapp.Order;
 import io.grpc.restaurantnetworkapp.Response;
 import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
+import io.grpc.restaurantnetworkapp.SendOrder;
 
 import com.google.common.base.Optional;
 import com.service.ServiceStub;
@@ -38,7 +38,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 {
 
 	private static final Logger logger = Logger.getLogger(ServiceStub.class.getName());
-	private static LinkedHashSet<StreamObserver<SendOrder>> dishes;
+	private static LinkedHashSet<StreamObserver<RecievedOrder>> dishes;
 	private static ServiceStub instance;
 	private static Collection<Table> tableRecord;
 	private static Collection<Order> orderRecord;
@@ -55,7 +55,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	///////////////////////////////////////////////////////////////////////////////////////
 	private ServiceStub() 
 	{
-		dishes 		= new LinkedHashSet<StreamObserver<SendOrder>>();
+		dishes 		= new LinkedHashSet<StreamObserver<RecievedOrder>>();
 		tableRecord = new ArrayList<Table>();		// For table inventory
 		orderRecord = new ArrayList<Order>();		// For record storage
 		orderIDs 	= new HashMap<Integer,Order>();	// For quick access transaction
@@ -69,7 +69,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	private ServiceStub(Collection<Table> tableRecord)
 	{
 		ServiceStub.tableRecord = tableRecord;
-		dishes 					= new LinkedHashSet<StreamObserver<SendOrder>>();
+		dishes 					= new LinkedHashSet<StreamObserver<RecievedOrder>>();
 		orderRecord 			= new ArrayList<Order>();
 		orderIDs 				= new HashMap<Integer,Order>();
 		orderList 				= new ArrayList<Order>();
@@ -190,19 +190,19 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	///////////////////////////////////////////////////////////////////////////////////////
 	// Clients -Kitchen, Waiter
 	// bidirectional streaming to send orders to kitchen monitors
-	// @Param responseObserver - observers registered to get SendOrder streaming
+	// @Param responseObserver - observers registered to get RecievedOrder streaming
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public StreamObserver<MakeOrder> orderstream(StreamObserver<SendOrder> responseObserver) {
+	public StreamObserver<SendOrder> orderstream(StreamObserver<RecievedOrder> responseObserver) {
 		dishes.add(responseObserver);
-		return new StreamObserver<MakeOrder>() {
+		return new StreamObserver<SendOrder>() {
 			@Override
-			public void onNext(MakeOrder value) {
+			public void onNext(SendOrder value) {
 				System.out.println(value);
 				
 				//System.out.println(value);
 				dishes
-				.forEach(o->o.onNext(SendOrder
+				.forEach(o->o.onNext(RecievedOrder
 						.newBuilder()
 						.setOrder(value)
 						.build()));
