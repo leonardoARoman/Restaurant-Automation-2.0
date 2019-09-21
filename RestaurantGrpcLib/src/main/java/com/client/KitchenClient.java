@@ -15,10 +15,10 @@ public class KitchenClient {
 	private final ManagedChannel channel;
 	private final RestaurantServiceGrpc.RestaurantServiceBlockingStub blockingStub;
 	private static RestaurantServiceGrpc.RestaurantServiceStub newStub;
-	
+	private static KitchenClient instance;
 	private static String[] status = {"CLEAN","TAKEN","DIRTY"};
 
-	public KitchenClient(String host, int port) 
+	private KitchenClient(String host, int port) 
 	{
 		// Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
 		// needing certificates.
@@ -27,21 +27,23 @@ public class KitchenClient {
 				.build());
 	}
 
-	KitchenClient(ManagedChannel channel) 
+	private KitchenClient(ManagedChannel channel) 
 	{
 		this.channel = channel;
 		blockingStub = RestaurantServiceGrpc.newBlockingStub(channel);
 		newStub = RestaurantServiceGrpc.newStub(channel);
 	}
 
-	public static RestaurantServiceGrpc.RestaurantServiceStub stub(){
-		return newStub;
+	public static KitchenClient getKitchenInstance(String host, int port) {
+		return instance!=null?instance:new KitchenClient(host,port);
 	}
 	
-	public void postOrder(Order order)
-	{
-		Response response = blockingStub.order(order);
-		logger.info(response.getMessage());
+	public RestaurantServiceGrpc.RestaurantServiceBlockingStub getNewBlockingStub(){
+		return blockingStub;
+	}
+	
+	public RestaurantServiceGrpc.RestaurantServiceStub getNewStub(){
+		return newStub;
 	}
 
 	/**
@@ -53,7 +55,7 @@ public class KitchenClient {
 				.newBuilder()
 				.setMessage(""+orderId)
 				.build());
-		if(order.getIsReady()) {
+		if(order.getIsCompleated()) {
 			logger.info("Order "+order.getOrderID()+" is ready.");
 		}else {
 			logger.info("Order "+order.getOrderID()+" is not ready.");
@@ -80,7 +82,7 @@ public class KitchenClient {
 	}
 
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		KitchenClient clientStub = new KitchenClient("192.168.1.11",8080);
 
 		Table table;
@@ -95,14 +97,14 @@ public class KitchenClient {
 					.newBuilder()
 					.setOrderID(i)
 					.setOrderNo(i)
-					.setIsReady(false)
+					.se(false)
 					.setTable(table)
 					.setMessage(i+": Poter House, Medium Raer")
 					.putOrder("Poter House", "Medium Raer")
 					.build();
 			clientStub.postOrder(order);
 		}
-		/*Order order = Order
+		Order order = Order
 				.newBuilder()
 				.setOrderID(0)
 				.setOrderNo(0)
@@ -111,7 +113,7 @@ public class KitchenClient {
 				.setMessage(0+": Poter House, Medium Raer")
 				.putOrder("Poter House", "Medium Raer")
 				.build();
-		clientStub.postOrder(order);*/
+		clientStub.postOrder(order);
 
 		System.out.println("\n");
 		logger.info("Orders in queue.");
@@ -119,7 +121,7 @@ public class KitchenClient {
 		for(Order o: orders) {
 			System.out.println("Order number "+o.getMessage());
 		}
-		/*
+		
 		Order order1 = Order
 				.newBuilder()
 				.setOrderID(order.getOrderID())
@@ -130,6 +132,6 @@ public class KitchenClient {
 				.build();
 		clientStub.postOrder(order1);
 		clientStub.getOrderStatus(order1.getOrderID());
-		 */
-	}
+		 
+	}*/
 }

@@ -3,10 +3,9 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import io.grpc.ManagedChannelBuilder;
+import com.client.KitchenClient;
 import io.grpc.restaurantnetworkapp.Dish;
-import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
-import io.grpc.restaurantnetworkapp.SendOrder;
+import io.grpc.restaurantnetworkapp.RecievedOrder;
 import io.grpc.stub.StreamObserver;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -24,10 +23,8 @@ public class KitchenController {
 
 	private static Stage stage;
 	private ObservableList<String> hotLineObsList1;
-	//private static KitchenClient clientSub;
 	private static final Logger logger = Logger.getLogger(KitchenController.class.getName());
-	private RestaurantServiceGrpc.RestaurantServiceStub orderStream;
-
+	private KitchenClient kitchenMonitor;
 	@FXML
 	private ListView<String> orderList1;
 
@@ -36,17 +33,17 @@ public class KitchenController {
 	 * @param mainStage
 	 */
 	public void start(Stage mainStage) {
-		orderStream = RestaurantServiceGrpc
-				.newStub(ManagedChannelBuilder.forAddress("192.168.1.6", 8080)
-						.usePlaintext()
-						.build());
-		orderStream.orderstream(new StreamObserver<SendOrder>() {
+		kitchenMonitor = KitchenClient.getKitchenInstance("10.0.0.169", 8080);
+		stage = mainStage;
+		startMonitor();
+	}
+	
+	private void startMonitor() {
+		kitchenMonitor
+		.getNewStub()
+		.orderstream(new StreamObserver<RecievedOrder>() {
 			@Override
-			public void onNext(SendOrder order) {
-				order.getOrder()
-				.getDishesList()
-				.forEach(d->System.out.println(d.getName()));
-				// TODO Auto-generated method stub
+			public void onNext(RecievedOrder order) {
 				List<Dish> dishes = order.getOrder().getDishesList();
 				Platform.runLater(()->{
 					ArrayList<String> list = new ArrayList<String>();
@@ -66,7 +63,6 @@ public class KitchenController {
 
 			}
 		});
-		stage = mainStage;
 	}
 	
 	public void clearMonitor() {
