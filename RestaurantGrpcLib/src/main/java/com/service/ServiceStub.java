@@ -219,47 +219,6 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
-	// ToDo: delete this once orderstream is implemented. 
-	///////////////////////////////////////////////////////////////////////////////////////
-	@Override
-	public void order(Order order, 
-			StreamObserver<Response> responseObserver) {
-		Response response = null;
-		// If the order exists then the order is being updated
-		if(orderIDs.containsKey(order.getOrderID())) {
-			// Remove old order from map by order ID.
-			//orderRecord.remove(orderIDs.get(order.getOrderID()));
-			orderQuee.remove(orderIDs.get(order.getOrderID()));
-			orderIDs.remove(order.getOrderID());
-			// Add new order in argument.
-			orderRecord.add(order);
-			orderIDs.put(order.getOrderID(),order);
-
-			response = Response
-					.newBuilder()
-					.setMessage("Order number "+order.getOrderNo()+" is ready.")
-					.build();
-		} else {
-			orderIDs.put(order.getOrderID(),order);
-			orderQuee.add(order);
-			orderRecord.add(order);
-			orderList.add(order);
-			response = Response
-					.newBuilder()
-					.setMessage("Order number "+order.getOrderNo()+" is inqueue.")
-					.build();
-		}
-
-		try {
-			saveOrder();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		responseObserver.onNext(response);
-		responseObserver.onCompleted();
-	}
-
-	///////////////////////////////////////////////////////////////////////////////////////
 	// @Clients: Kitchen
 	// orderqueue: Removed order from queue once ready
 	///////////////////////////////////////////////////////////////////////////////////////
