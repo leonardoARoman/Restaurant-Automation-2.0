@@ -59,7 +59,7 @@ message SendOrder
 
 message RecievedOrder
 {
-	MakeOrder order = 1;
+	SendOrder order = 1;
 }
 
 message Order
