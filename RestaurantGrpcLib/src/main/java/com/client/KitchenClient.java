@@ -8,7 +8,6 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.restaurantnetworkapp.Order;
 import io.grpc.restaurantnetworkapp.Response;
 import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
-import io.grpc.restaurantnetworkapp.Table;
 
 public class KitchenClient {
 	private static final Logger logger = Logger.getLogger(HostClient.class.getName());
