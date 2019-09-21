@@ -23,10 +23,17 @@ import io.grpc.StatusRuntimeException;
 public class HostClient {
 	private static final Logger logger = Logger.getLogger(HostClient.class.getName());
 	private final ManagedChannel channel;
-	private final RestaurantServiceGrpc.RestaurantServiceBlockingStub blockingStub;
+	private static HostClient hostInstance;
+	private static RestaurantServiceGrpc.RestaurantServiceBlockingStub blockingStub;
+	private static RestaurantServiceGrpc.RestaurantServiceStub newStub;
 	private static String[] status = {"CLEAN","TAKEN","DIRTY"};
 
-	public HostClient(String host, int port) 
+	/**
+	 * 
+	 * @param host
+	 * @param port
+	 */
+	private HostClient(String host, int port) 
 	{
 		// Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
 		// needing certificates.
@@ -35,10 +42,41 @@ public class HostClient {
 				.build());
 	}
 
-	HostClient(ManagedChannel channel) 
+	/**
+	 * 
+	 * @param channel
+	 */
+	private HostClient(ManagedChannel channel) 
 	{
 		this.channel = channel;
 		blockingStub = RestaurantServiceGrpc.newBlockingStub(channel);
+		newStub = RestaurantServiceGrpc.newStub(channel);
+	}
+
+	/**
+	 * 
+	 * @param host
+	 * @param port
+	 * @return
+	 */
+	public static HostClient getHostInstance(String host, int port) {
+		return hostInstance!=null?hostInstance:new HostClient(host,port);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public RestaurantServiceGrpc.RestaurantServiceBlockingStub getNewBlockingStub(){
+		return blockingStub;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public RestaurantServiceGrpc.RestaurantServiceStub getNewStub(){
+		return newStub;
 	}
 
 	/**
@@ -50,56 +88,20 @@ public class HostClient {
 		logger.info("Will try to get tables from database...");
 		ArrayList<Table> tables = new ArrayList<Table>();
 		Iterator<Table> response = null;
-		try 
-		{
+		try {
 			response = blockingStub.tables(Response
 					.newBuilder()
 					.setMessage("Get talbe record")
 					.build());
 		}
-		catch (StatusRuntimeException e)
-		{
+		catch (StatusRuntimeException e) {
 			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
 		}
-		while(response.hasNext())
-		{
+		while(response.hasNext()) {
 			Table table= response.next();
 			tables.add(table);
 			logger.info("Table "+table.getTableID()+" status "+status[table.getStatusValue()]);
 		}
 		return tables;
 	}
-	
-	/**
-	 * updateTable updates a table given an id table
-	 * returns table state record
-	 * @param id
-	 * @return
-	 */
-	public void updateTable(int tableId, int tableState) {
-		logger.info("Will try update table "+tableId+"...");
-		Iterator<Table> response = null;
-		Table table = Table.newBuilder()
-				.setTableID(tableId)
-				.setStatusValue(tableState)
-				.build();
-		try 
-		{
-			response = blockingStub.update(table);
-		} 
-		catch (StatusRuntimeException e) 
-		{
-			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-			response =  null;
-		}
-		logger.info("Table "+tableId+" is now "+status[tableState]);
-	}
-	/*
-	public static void main(String[] args)
-	{
-		HostClient clientStub = new HostClient("10.0.0.107",8080);
-		
-		clientStub.getTables();
-	}
-	*/
 }
