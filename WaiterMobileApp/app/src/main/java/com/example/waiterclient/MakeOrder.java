@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-
 import com.example.APIs.ChannelManager;
 import com.example.APIs.DatabaseManager;
 import com.example.adapter.OrderAdapter;
@@ -15,14 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.restaurantnetworkapp.Order;
-import io.grpc.restaurantnetworkapp.Response;
+import io.grpc.restaurantnetworkapp.RecievedOrder;
 import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
-import io.grpc.restaurantnetworkapp.SendOrder;
-import io.grpc.restaurantnetworkapp.Table;
 import io.grpc.stub.StreamObserver;
 
 public class MakeOrder extends AppCompatActivity {
@@ -102,15 +96,15 @@ public class MakeOrder extends AppCompatActivity {
         RestaurantServiceGrpc.RestaurantServiceStub stub =
                 RestaurantServiceGrpc.newStub(channel);
 
-        io.grpc.restaurantnetworkapp.MakeOrder sendOrder =
-                io.grpc.restaurantnetworkapp.MakeOrder.newBuilder()
+        io.grpc.restaurantnetworkapp.SendOrder sendOrder =
+                io.grpc.restaurantnetworkapp.SendOrder.newBuilder()
                 .setNumber(order.getOrderNumber())
                 .addAllDishes(dishList)
                 .build();
 
-        stub.orderstream(new StreamObserver<SendOrder>() {
+        stub.orderstream(new StreamObserver<RecievedOrder>() {
             @Override
-            public void onNext(SendOrder value) {
+            public void onNext(RecievedOrder value) {
 
             }
 
