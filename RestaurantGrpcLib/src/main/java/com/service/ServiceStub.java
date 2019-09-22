@@ -147,7 +147,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		return new StreamObserver<Table>() {
 			@Override
 			public void onNext(Table value) {
-				System.out.println(value);	
+				System.out.println("Intercepted Request: Table update\n"+value);	
 				Table table = tableRecord
 						.stream()
 						.filter(t->t.getTableID()==value.getTableID())
@@ -204,7 +204,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		return new StreamObserver<SendOrder>() {
 			@Override
 			public void onNext(SendOrder value) {
-				System.out.println(value);
+				System.out.println("Intercepted Request: Order post\n "+value);
 
 				//System.out.println(value);
 				dishObservers

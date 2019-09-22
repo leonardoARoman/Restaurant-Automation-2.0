@@ -11,10 +11,9 @@ import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
 
 public class KitchenClient {
 	private static final Logger logger = Logger.getLogger(HostClient.class.getName());
-	private final ManagedChannel channel;
 	private final RestaurantServiceGrpc.RestaurantServiceBlockingStub blockingStub;
 	private static RestaurantServiceGrpc.RestaurantServiceStub newStub;
-	private static KitchenClient instance;
+	private static KitchenClient kitchenChannel;
 	private static String[] status = {"CLEAN","TAKEN","DIRTY"};
 
 	private KitchenClient(String host, int port) 
@@ -28,13 +27,12 @@ public class KitchenClient {
 
 	private KitchenClient(ManagedChannel channel) 
 	{
-		this.channel = channel;
 		blockingStub = RestaurantServiceGrpc.newBlockingStub(channel);
 		newStub = RestaurantServiceGrpc.newStub(channel);
 	}
 
-	public static KitchenClient getKitchenInstance(String host, int port) {
-		return instance!=null?instance:new KitchenClient(host,port);
+	public static KitchenClient connectToServer(String host, int port) {
+		return kitchenChannel!=null?kitchenChannel:new KitchenClient(host,port);
 	}
 	
 	public RestaurantServiceGrpc.RestaurantServiceBlockingStub getNewBlockingStub(){

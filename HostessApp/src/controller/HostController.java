@@ -1,17 +1,9 @@
 package controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.client.HostClient;
-
 import io.grpc.restaurantnetworkapp.ReceivedTable;
 import io.grpc.restaurantnetworkapp.Table;
 import io.grpc.stub.StreamObserver;
@@ -19,7 +11,6 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -54,7 +45,7 @@ public class HostController {
 
 	public void start(Stage primaryStage) throws IOException {
 		// TODO Auto-generated method stub
-		tableMonitor = HostClient.getHostInstance("10.0.0.169",8080);
+		tableMonitor = HostClient.connectToServer("10.0.0.169",8080);
 		tables = new ArrayList<Table>();
 		button = new ImageView[24];
 
