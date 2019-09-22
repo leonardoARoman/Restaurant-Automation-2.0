@@ -1,7 +1,6 @@
 package com.client;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +22,7 @@ import io.grpc.StatusRuntimeException;
 public class HostClient {
 	private static final Logger logger = Logger.getLogger(HostClient.class.getName());
 	private final ManagedChannel channel;
-	private static HostClient hostInstance;
+	private static HostClient hostessChannel;
 	private static RestaurantServiceGrpc.RestaurantServiceBlockingStub blockingStub;
 	private static RestaurantServiceGrpc.RestaurantServiceStub newStub;
 	private static String[] status = {"CLEAN","TAKEN","DIRTY"};
@@ -59,8 +58,8 @@ public class HostClient {
 	 * @param port
 	 * @return
 	 */
-	public static HostClient getHostInstance(String host, int port) {
-		return hostInstance!=null?hostInstance:new HostClient(host,port);
+	public static HostClient connectToServer(String host, int port) {
+		return hostessChannel!=null?hostessChannel:new HostClient(host,port);
 	}
 
 	/**

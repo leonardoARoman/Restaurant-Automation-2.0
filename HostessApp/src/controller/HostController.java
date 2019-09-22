@@ -1,22 +1,16 @@
 package controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.client.HostClient;
-
+import io.grpc.restaurantnetworkapp.ReceivedTable;
 import io.grpc.restaurantnetworkapp.Table;
+import io.grpc.stub.StreamObserver;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -26,7 +20,7 @@ import model.DialogBoxHelper;
 import model.TableState;
 
 public class HostController {
-	private static HostClient clientSub;
+	private static HostClient tableMonitor;
 	private static final Logger logger = Logger.getLogger(HostController.class.getName());
 	private ObservableList<String> specialsObsList,ffObsList,desertObsList,drinksObsList;
 
@@ -51,7 +45,7 @@ public class HostController {
 
 	public void start(Stage primaryStage) throws IOException {
 		// TODO Auto-generated method stub
-		clientSub = new HostClient("10.0.0.107",8080);
+		tableMonitor = HostClient.connectToServer("10.0.0.169",8080);
 		tables = new ArrayList<Table>();
 		button = new ImageView[24];
 
@@ -111,6 +105,58 @@ public class HostController {
 		}
 	}
 
+	private void updateTable(int tableNumber, int action ) {
+		Table updateTable = Table.newBuilder()
+				.setTableID(tableNumber)
+				.setStatusValue(action)
+				.build();
+
+		tableMonitor.getNewStub().updatetable(new StreamObserver<ReceivedTable>() {
+			@Override
+			public void onNext(ReceivedTable table) {
+				int tableId = (int)table.getTable().getTableID() - 1;
+				Platform.runLater(()->{
+					switch(table.getTable().getStatusValue()) {
+					case 0:
+						try {
+							button[tableId].setImage(TableState.cleanTable(URL[tableId]));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}	
+						break;
+					case 1:
+						try {
+							button[tableId].setImage(TableState.ocupiedTable(URL[tableId]));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+					case 2:
+						try {
+							button[tableId].setImage(TableState.dirtyTable(URL[tableId]));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						break;
+					default:
+						break;
+					}
+				});
+			}
+
+			@Override
+			public void onCompleted() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onError(Throwable arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		}).onNext(updateTable);
+	}
 	/**
 	 * 
 	 * @throws IOException
@@ -120,15 +166,15 @@ public class HostController {
 
 		if(action == 1) {
 			table1.setImage(TableState.ocupiedTable(url+"t1.png"));
-			clientSub.updateTable(1,action);
+			updateTable(1,action);
 			return;
 		} else if(action == 2) {
 			table1.setImage(TableState.dirtyTable(url+"t1.png"));
-			clientSub.updateTable(1,action);
+			updateTable(1,action);
 			return;
 		} else if(action == 0) {
 			table1.setImage(TableState.cleanTable(url+"t1.png"));
-			clientSub.updateTable(1,action);
+			updateTable(1,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -144,15 +190,15 @@ public class HostController {
 
 		if(action == 1) {
 			table2.setImage(TableState.ocupiedTable(url+"t2.png"));
-			clientSub.updateTable(2,action);
+			updateTable(2,action);
 			return;
 		} else if(action == 2) {
 			table2.setImage(TableState.dirtyTable(url+"t2.png"));
-			clientSub.updateTable(2,action);
+			updateTable(2,action);
 			return;
 		} else if(action == 0) {
 			table2.setImage(TableState.cleanTable(url+"t2.png"));
-			clientSub.updateTable(2,action);
+			updateTable(2,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -168,15 +214,15 @@ public class HostController {
 
 		if(action == 1) {
 			table3.setImage(TableState.ocupiedTable(url+"t3.png"));
-			clientSub.updateTable(3,action);
+			updateTable(3,action);
 			return;
 		} else if(action == 2) {
 			table3.setImage(TableState.dirtyTable(url+"t3.png"));
-			clientSub.updateTable(3,action);
+			updateTable(3,action);
 			return;
 		} else if(action == 0) {
 			table3.setImage(TableState.cleanTable(url+"t3.png"));
-			clientSub.updateTable(3,action);
+			updateTable(3,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -192,15 +238,15 @@ public class HostController {
 
 		if(action == 1) {
 			table4.setImage(TableState.ocupiedTable(url+"t4.png"));
-			clientSub.updateTable(4,action);
+			updateTable(4,action);
 			return;
 		} else if(action == 2) {
 			table4.setImage(TableState.dirtyTable(url+"t4.png"));
-			clientSub.updateTable(4,action);
+			updateTable(4,action);
 			return;
 		} else if(action == 0) {
 			table4.setImage(TableState.cleanTable(url+"t4.png"));
-			clientSub.updateTable(4,action);
+			updateTable(4,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -216,15 +262,15 @@ public class HostController {
 
 		if(action == 1) {
 			table5.setImage(TableState.ocupiedTable(url+"t5.png"));
-			clientSub.updateTable(5,action);
+			updateTable(5,action);
 			return;
 		} else if(action == 2) {
 			table5.setImage(TableState.dirtyTable(url+"t5.png"));
-			clientSub.updateTable(5,action);
+			updateTable(5,action);
 			return;
 		} else if(action == 0) {
 			table5.setImage(TableState.cleanTable(url+"t5.png"));
-			clientSub.updateTable(5,action);
+			updateTable(5,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -241,15 +287,15 @@ public class HostController {
 
 		if(action == 1) {
 			table6.setImage(TableState.ocupiedTable(url+"t6.png"));
-			clientSub.updateTable(6,action);
+			updateTable(6,action);
 			return;
 		} else if(action == 2) {
 			table6.setImage(TableState.dirtyTable(url+"t6.png"));
-			clientSub.updateTable(6,action);
+			updateTable(6,action);
 			return;
 		} else if(action == 0) {
 			table6.setImage(TableState.cleanTable(url+"t6.png"));
-			clientSub.updateTable(6,action);
+			updateTable(6,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -266,15 +312,15 @@ public class HostController {
 
 		if(action == 1) {
 			table7.setImage(TableState.ocupiedTable(url+"t7.png"));
-			clientSub.updateTable(7,action);
+			updateTable(7,action);
 			return;
 		} else if(action == 2) {
 			table7.setImage(TableState.dirtyTable(url+"t7.png"));
-			clientSub.updateTable(7,action);
+			updateTable(7,action);
 			return;
 		} else if(action == 0) {
 			table7.setImage(TableState.cleanTable(url+"t7.png"));
-			clientSub.updateTable(7,action);
+			updateTable(7,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -291,15 +337,15 @@ public class HostController {
 
 		if(action == 1) {
 			table8.setImage(TableState.ocupiedTable(url+"t8.png"));
-			clientSub.updateTable(8,action);
+			updateTable(8,action);
 			return;
 		} else if(action == 2) {
 			table8.setImage(TableState.dirtyTable(url+"t8.png"));
-			clientSub.updateTable(8,action);
+			updateTable(8,action);
 			return;
 		} else if(action == 0) {
 			table8.setImage(TableState.cleanTable(url+"t8.png"));
-			clientSub.updateTable(8,action);
+			updateTable(8,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -316,15 +362,15 @@ public class HostController {
 
 		if(action == 1) {
 			table9.setImage(TableState.ocupiedTable(url+"t9.png"));
-			clientSub.updateTable(9,action);
+			updateTable(9,action);
 			return;
 		} else if(action == 2) {
 			table9.setImage(TableState.dirtyTable(url+"t9.png"));
-			clientSub.updateTable(9,action);
+			updateTable(9,action);
 			return;
 		} else if(action == 0) {
 			table9.setImage(TableState.cleanTable(url+"t9.png"));
-			clientSub.updateTable(9,action);
+			updateTable(9,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -341,15 +387,15 @@ public class HostController {
 
 		if(action == 1) {
 			table10.setImage(TableState.ocupiedTable(url+"t10.png"));
-			clientSub.updateTable(10,action);
+			updateTable(10,action);
 			return;
 		} else if(action == 2) {
 			table10.setImage(TableState.dirtyTable(url+"t10.png"));
-			clientSub.updateTable(10,action);
+			updateTable(10,action);
 			return;
 		} else if(action == 0) {
 			table10.setImage(TableState.cleanTable(url+"t10.png"));
-			clientSub.updateTable(10,action);
+			updateTable(10,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -366,15 +412,15 @@ public class HostController {
 
 		if(action == 1) {
 			table11.setImage(TableState.ocupiedTable(url+"t11.png"));
-			clientSub.updateTable(11,action);
+			updateTable(11,action);
 			return;
 		} else if(action == 2) {
 			table11.setImage(TableState.dirtyTable(url+"t11.png"));
-			clientSub.updateTable(11,action);
+			updateTable(11,action);
 			return;
 		} else if(action == 0) {
 			table11.setImage(TableState.cleanTable(url+"t11.png"));
-			clientSub.updateTable(11,action);
+			updateTable(11,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -391,15 +437,15 @@ public class HostController {
 
 		if(action == 1) {
 			table12.setImage(TableState.ocupiedTable(url+"t12.png"));
-			clientSub.updateTable(12,action);
+			updateTable(12,action);
 			return;
 		} else if(action == 2) {
 			table12.setImage(TableState.dirtyTable(url+"t12.png"));
-			clientSub.updateTable(12,action);
+			updateTable(12,action);
 			return;
 		} else if(action == 0) {
 			table12.setImage(TableState.cleanTable(url+"t12.png"));
-			clientSub.updateTable(12,action);
+			updateTable(12,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -416,15 +462,15 @@ public class HostController {
 
 		if(action == 1) {
 			table20.setImage(TableState.ocupiedTable(url+"t20.png"));
-			clientSub.updateTable(13,action);
+			updateTable(13,action);
 			return;
 		} else if(action == 2) {
 			table20.setImage(TableState.dirtyTable(url+"t20.png"));
-			clientSub.updateTable(13,action);
+			updateTable(13,action);
 			return;
 		} else if(action == 0) {
 			table20.setImage(TableState.cleanTable(url+"t20.png"));
-			clientSub.updateTable(13,action);
+			updateTable(13,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -441,15 +487,15 @@ public class HostController {
 
 		if(action == 1) {
 			table21.setImage(TableState.ocupiedTable(url+"t21.png"));
-			clientSub.updateTable(14,action);
+			updateTable(14,action);
 			return;
 		} else if(action == 2) {
 			table21.setImage(TableState.dirtyTable(url+"t21.png"));
-			clientSub.updateTable(14,action);
+			updateTable(14,action);
 			return;
 		} else if(action == 0) {
 			table21.setImage(TableState.cleanTable(url+"t21.png"));
-			clientSub.updateTable(14,action);
+			updateTable(14,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -466,15 +512,15 @@ public class HostController {
 
 		if(action == 1) {
 			table22.setImage(TableState.ocupiedTable(url+"t22.png"));
-			clientSub.updateTable(15,action);
+			updateTable(15,action);
 			return;
 		} else if(action == 2) {
 			table22.setImage(TableState.dirtyTable(url+"t22.png"));
-			clientSub.updateTable(15,action);
+			updateTable(15,action);
 			return;
 		} else if(action == 0) {
 			table22.setImage(TableState.cleanTable(url+"t22.png"));
-			clientSub.updateTable(15,action);
+			updateTable(15,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -491,15 +537,15 @@ public class HostController {
 
 		if(action == 1) {
 			table23.setImage(TableState.ocupiedTable(url+"t23.png"));
-			clientSub.updateTable(16,action);
+			updateTable(16,action);
 			return;
 		} else if(action == 2) {
 			table23.setImage(TableState.dirtyTable(url+"t23.png"));
-			clientSub.updateTable(16,action);
+			updateTable(16,action);
 			return;
 		} else if(action == 0) {
 			table23.setImage(TableState.cleanTable(url+"t23.png"));
-			clientSub.updateTable(16,action);
+			updateTable(16,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -516,15 +562,15 @@ public class HostController {
 
 		if(action == 1) {
 			table24.setImage(TableState.ocupiedTable(url+"t24.png"));
-			clientSub.updateTable(17,action);
+			updateTable(17,action);
 			return;
 		} else if(action == 2) {
 			table24.setImage(TableState.dirtyTable(url+"t24.png"));
-			clientSub.updateTable(17,action);
+			updateTable(17,action);
 			return;
 		} else if(action == 0) {
 			table24.setImage(TableState.cleanTable(url+"t24.png"));
-			clientSub.updateTable(17,action);
+			updateTable(17,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -541,15 +587,15 @@ public class HostController {
 
 		if(action == 1) {
 			table25.setImage(TableState.ocupiedTable(url+"t25.png"));
-			clientSub.updateTable(18,action);
+			updateTable(18,action);
 			return;
 		} else if(action == 2) {
 			table25.setImage(TableState.dirtyTable(url+"t25.png"));
-			clientSub.updateTable(18,action);
+			updateTable(18,action);
 			return;
 		} else if(action == 0) {
 			table25.setImage(TableState.cleanTable(url+"t25.png"));
-			clientSub.updateTable(18,action);
+			updateTable(18,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -566,15 +612,15 @@ public class HostController {
 
 		if(action == 1) {
 			table26.setImage(TableState.ocupiedTable(url+"t26.png"));
-			clientSub.updateTable(19,action);
+			updateTable(19,action);
 			return;
 		} else if(action == 2) {
 			table26.setImage(TableState.dirtyTable(url+"t26.png"));
-			clientSub.updateTable(19,action);
+			updateTable(19,action);
 			return;
 		} else if(action == 0) {
 			table26.setImage(TableState.cleanTable(url+"t26.png"));
-			clientSub.updateTable(19,action);
+			updateTable(19,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -591,15 +637,15 @@ public class HostController {
 
 		if(action == 1) {
 			table27.setImage(TableState.ocupiedTable(url+"t27.png"));
-			clientSub.updateTable(20,action);
+			updateTable(20,action);
 			return;
 		} else if(action == 2) {
 			table27.setImage(TableState.dirtyTable(url+"t27.png"));
-			clientSub.updateTable(20,action);
+			updateTable(20,action);
 			return;
 		} else if(action == 0) {
 			table27.setImage(TableState.cleanTable(url+"t27.png"));
-			clientSub.updateTable(20,action);
+			updateTable(20,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -616,15 +662,15 @@ public class HostController {
 
 		if(action == 1) {
 			table28.setImage(TableState.ocupiedTable(url+"t28.png"));
-			clientSub.updateTable(21,action);
+			updateTable(21,action);
 			return;
 		} else if(action == 2) {
 			table28.setImage(TableState.dirtyTable(url+"t28.png"));
-			clientSub.updateTable(21,action);
+			updateTable(21,action);
 			return;
 		} else if(action == 0) {
 			table28.setImage(TableState.cleanTable(url+"t28.png"));
-			clientSub.updateTable(21,action);
+			updateTable(21,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -641,15 +687,15 @@ public class HostController {
 
 		if(action == 1) {
 			table29.setImage(TableState.ocupiedTable(url+"t29.png"));
-			clientSub.updateTable(22,action);
+			updateTable(22,action);
 			return;
 		} else if(action == 2) {
 			table29.setImage(TableState.dirtyTable(url+"t29.png"));
-			clientSub.updateTable(22,action);
+			updateTable(22,action);
 			return;
 		} else if(action == 0) {
 			table29.setImage(TableState.cleanTable(url+"t29.png"));
-			clientSub.updateTable(22,action);
+			updateTable(22,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -666,15 +712,15 @@ public class HostController {
 
 		if(action == 1) {
 			table30.setImage(TableState.ocupiedTable(url+"t30.png"));
-			clientSub.updateTable(23,action);
+			updateTable(23,action);
 			return;
 		} else if(action == 2) {
 			table30.setImage(TableState.dirtyTable(url+"t30.png"));
-			clientSub.updateTable(23,action);
+			updateTable(23,action);
 			return;
 		} else if(action == 0) {
 			table30.setImage(TableState.cleanTable(url+"t30.png"));
-			clientSub.updateTable(23,action);
+			updateTable(23,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
@@ -691,23 +737,27 @@ public class HostController {
 
 		if(action == 1) {
 			table31.setImage(TableState.ocupiedTable(url+"t31.png"));
-			clientSub.updateTable(24,action);
+			updateTable(24,action);
 			return;
 		} else if(action == 2) {
 			table31.setImage(TableState.dirtyTable(url+"t31.png"));
-			clientSub.updateTable(24,action);
+			updateTable(24,action);
 			return;
 		} else if(action == 0) {
 			table31.setImage(TableState.cleanTable(url+"t31.png"));
-			clientSub.updateTable(24,action);
+			updateTable(24,action);
 			return;
 		} else if(action == 4) {
 			//viewOrder();
 		}
 	}
 
+	/**
+	 * back up update if server goes down
+	 * @throws IOException
+	 */
 	public void updateDiningRoom() throws IOException {
-		tables = clientSub.getTables();
+		tables = tableMonitor.getTables();
 		button[0] = table1;button[1] = table2;button[2] = table3;button[3] = table4;
 		button[4] = table5;button[5] = table6;button[6] = table7;button[7] = table8;
 		button[8] = table9;button[9] = table10;button[10] = table11;button[11] = table12;
