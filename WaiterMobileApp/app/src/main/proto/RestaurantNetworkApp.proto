@@ -14,7 +14,7 @@ service RestaurantService
 	/* add a table to the restaurant: Taken care by admin */
 	rpc add	(Table) returns (Response) {}
 	/* Make update on a table get back table record list */
-	rpc update (Table) returns (stream Table) {}
+	rpc updatetable (stream Table) returns (stream ReceivedTable) {}
 	/* Request table record list on waiter request by refresh */
 	rpc tables (Response) returns (stream Table) {}
 	/* Request order status by order id */
@@ -43,6 +43,11 @@ message Table
 
 }
 
+message ReceivedTable
+{
+	Table table = 1;
+}
+
 message Dish
 {
 	int32	id		= 1;
@@ -66,7 +71,7 @@ message Order
 {
 	int32 		orderID 		= 1;
 	int64 		orderNo 		= 2;
-	bool 		isCompleated 	= 3;
+	bool 			isCompleated 	= 3;
 	Table 		tableNumber 	= 4;
 	SendOrder	order 			= 5;
 }

@@ -13,6 +13,7 @@ import com.example.model.TableState;
 
 import java.util.ArrayList;
 import io.grpc.ManagedChannel;
+import io.grpc.restaurantnetworkapp.ReceivedTable;
 import io.grpc.restaurantnetworkapp.Response;
 import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
 import io.grpc.restaurantnetworkapp.Table;
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Table request = Table
+        Table updateTable = Table
                 .newBuilder()
                 .setTableID(tableNo)// 1-12
                 .setStatusValue(tableState)
@@ -108,12 +109,18 @@ public class MainActivity extends AppCompatActivity {
         RestaurantServiceGrpc.RestaurantServiceStub stub =
                 RestaurantServiceGrpc.newStub(channel);
 
-        stub.update(request, new StreamObserver<Table>()
+        stub.updatetable(new StreamObserver<ReceivedTable>()
         {
             @Override
-            public void onNext(Table value)
-            {
-                //Log.v(TAG,"MESSAGE: Table "+value.getTableID()+" is "+status[value.getStatusValue()]);
+            public void onNext(ReceivedTable table) {
+                int id = (int) table.getTable().getTableID();
+                if (id < 13) {
+                    TableState tableState = tables.get(id - 1);
+                    Button btn = (Button) findViewById(tableState.getButton().getId());
+                    tableState.setTableState(table.getTable().getStatusValue());
+                    setState(btn, tableState);
+                    Log.v(TAG, "MESSAGE: table " + id + " " + status[tableState.getTableState()]);
+                }
             }
 
             @Override
@@ -127,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 //Log.v(TAG,"MESSAGE: Table "+tableNo+" updated.");
             }
-        });
+        }).onNext(updateTable);
     }
 
     /**
