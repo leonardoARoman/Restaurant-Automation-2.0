@@ -3,9 +3,6 @@ package model;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
-
-import com.client.HostClient;
-
 import controller.HostController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

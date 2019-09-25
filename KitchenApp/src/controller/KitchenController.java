@@ -3,7 +3,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import com.client.KitchenClient;
+import com.api.KitchenClient;
 import io.grpc.restaurantnetworkapp.Dish;
 import io.grpc.restaurantnetworkapp.RecievedOrder;
 import io.grpc.stub.StreamObserver;

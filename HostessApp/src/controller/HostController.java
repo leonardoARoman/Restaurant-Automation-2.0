@@ -3,7 +3,7 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import com.client.HostClient;
+import com.api.HostClient;
 import io.grpc.restaurantnetworkapp.ReceivedTable;
 import io.grpc.restaurantnetworkapp.Table;
 import io.grpc.stub.StreamObserver;
