@@ -55,20 +55,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		orderList 		= new ArrayList<Order>();		// To display in kitchen monitors
 		orderQuee 		= new LinkedList<Order>();		// To remove from queue and update orderlist
 	}
-	/**
-	 * 
-	 * @param tableRecord list of tables to configure at boot up state
-	 */
-	private ServiceStub(Collection<Table> tableRecord)
-	{
-		ServiceStub.tableRecord = tableRecord;
-		dishObservers			= new LinkedHashSet<StreamObserver<RecievedOrder>>();
-		tableObservers			= new LinkedHashSet<StreamObserver<ReceivedTable>>();
-		orderRecord 			= new ArrayList<Order>();
-		orderIDs 				= new HashMap<Integer,Order>();
-		orderList 				= new ArrayList<Order>();
-		orderQuee 				= new LinkedList<Order>();
-	}
+
 	/**
 	 * 
 	 * @return singleton of type ServiceStub
@@ -76,23 +63,6 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	 */
 	public static ServiceStub getInstance() throws IOException {
 		return instance == null ? new ServiceStub() : instance;
-	}
-	/**
-	 * 
-	 * @param tableRecord List of tables at ready state for boot up
-	 * @return singleton of type ServiceStub with tables configured at instantiation
-	 * @throws IOException Empty container
-	 */
-	public static ServiceStub getInstance(Collection<Table> tableRecord) throws IOException {
-		if(instance==null) {
-			instance = new ServiceStub(tableRecord);
-			try {
-				updateTableRecord();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return instance;
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -140,10 +110,11 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	@Override
 	public StreamObserver<Table> updatetable(StreamObserver<ReceivedTable> responseObserver) {
 		tableObservers.add(responseObserver);
+		System.out.println("Intercepted Request: Update for Table ");	
 		return new StreamObserver<Table>() {
 			@Override
 			public void onNext(Table value) {
-				System.out.println("Intercepted Request: Table update\n"+value);	
+				System.out.println(value.getTableID()+"\n"+value);	
 				Table table = tableRecord
 						.stream()
 						.filter(t->t.getTableID()==value.getTableID())
@@ -166,11 +137,11 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			}
 			@Override
 			public void onError(Throwable t) {
-				// TODO Auto-generated method stub
+				System.out.println(t.toString());
 			}
 			@Override
 			public void onCompleted() {
-				// TODO Auto-generated method stub
+				System.out.println("Compleated");
 			}
 		};		
 	}
@@ -198,11 +169,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		return new StreamObserver<SendOrder>() {
 			@Override
 			public void onNext(SendOrder value) {
-				System.out.println("Intercepted Request: Order post\n "+value);
-
-				//System.out.println(value);
-				dishObservers
-				.forEach(o->o.onNext(RecievedOrder
+				dishObservers.forEach(o->o.onNext(RecievedOrder
 						.newBuilder()
 						.setOrder(value)
 						.build()));
@@ -247,24 +214,35 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		responseObserver.onCompleted();
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////
+	// @Clients: Admin, Waiter, Host
+	// status: returns the state of a given order
+	///////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public void tablestate(Response request, 
+			StreamObserver<Table> responseObserver) {
+		int orderNumber = Integer.parseInt(request.getMessage());
+		tableRecord.forEach(t->{
+			if(t.getTableID()==orderNumber) {
+				responseObserver.onNext(t);
+			}
+		});
+		responseObserver.onCompleted();
+	}
+	
 	private static void updateTableRecord() throws IOException 
 	{
 		ObjectOutputStream outputStream = null;
 		FileOutputStream oututfile = null;
-		try 
-		{
+		try {
 			oututfile = new FileOutputStream(TableRecDatabaseURL);
 			outputStream = new ObjectOutputStream(oututfile);
 			outputStream.writeObject(tableRecord);
-		} 
-		catch (IOException  e) 
-		{
+		} catch (IOException  e) {
 			e.printStackTrace();
 		}
-		finally 
-		{
-			if (outputStream != null)
-			{
+		finally {
+			if (outputStream != null) {
 				outputStream.close();
 			}
 		}

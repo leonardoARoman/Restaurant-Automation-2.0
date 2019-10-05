@@ -19,6 +19,8 @@ service RestaurantService
 	rpc tables (Response) returns (stream Table) {}
 	/* Request order status by order id */
 	rpc status (Response) returns (Order) {}
+	/* */
+	rpc tablestate (Response) returns (Table) {}
 	/* Get orders in queue */
 	rpc orderqueue (Response) returns (stream Order) {}
 	/* Send order stream and publish the dishes to respective kitchen monitor */

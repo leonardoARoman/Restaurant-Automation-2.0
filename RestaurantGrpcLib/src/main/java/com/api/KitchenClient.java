@@ -15,7 +15,12 @@ public class KitchenClient {
 	private static RestaurantServiceGrpc.RestaurantServiceStub newStub;
 	private static KitchenClient kitchenChannel;
 	private static String[] status = {"CLEAN","TAKEN","DIRTY"};
-
+	
+	/**
+	 * 
+	 * @param host
+	 * @param port
+	 */
 	private KitchenClient(String host, int port) 
 	{
 		// Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
@@ -25,24 +30,52 @@ public class KitchenClient {
 				.build());
 	}
 
+	/**
+	 * 
+	 * @param channel
+	 */
 	private KitchenClient(ManagedChannel channel) 
 	{
 		blockingStub = RestaurantServiceGrpc.newBlockingStub(channel);
 		newStub = RestaurantServiceGrpc.newStub(channel);
 	}
 
+	/**
+	 * 
+	 * @param host
+	 * @param port
+	 * @return
+	 */
 	public static KitchenClient connectToServer(String host, int port) {
-		return kitchenChannel!=null?kitchenChannel:new KitchenClient(host,port);
+		if(kitchenChannel == null) {
+			kitchenChannel = new KitchenClient(host,port);
+		}
+		return kitchenChannel;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public RestaurantServiceGrpc.RestaurantServiceBlockingStub getNewBlockingStub(){
 		return blockingStub;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public RestaurantServiceGrpc.RestaurantServiceStub getNewStub(){
 		return newStub;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isConnected() {
+		return kitchenChannel != null;
+	}
 	/**
 	 * For debugging: kitchen does not need order status
 	 * @param orderId

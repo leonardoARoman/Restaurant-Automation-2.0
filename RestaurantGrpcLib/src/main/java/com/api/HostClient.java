@@ -58,9 +58,19 @@ public class HostClient {
 	 * @return
 	 */
 	public static HostClient connectToServer(String host, int port) {
-		return hostessChannel!=null?hostessChannel:new HostClient(host,port);
+		if(hostessChannel == null) {
+			hostessChannel = new HostClient(host,port);
+		}
+		return hostessChannel;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isConnected() {
+		return hostessChannel != null;
+	}
 	/**
 	 * 
 	 * @return
@@ -92,7 +102,7 @@ public class HostClient {
 		while(response.hasNext()) {
 			Table table = response.next();
 			tableList.add(table);
-			logger.info("Table "+table.getTableID()+" status "+status[table.getStatusValue()]);
+			//logger.info("Table "+table.getTableID()+" status "+status[table.getStatusValue()]);
 		}
 		return tableList;
 	}
@@ -118,7 +128,7 @@ public class HostClient {
 		while(response.hasNext()) {
 			Table table= response.next();
 			tables.add(table);
-			logger.info("Table "+table.getTableID()+" status "+status[table.getStatusValue()]);
+			//logger.info("Table "+table.getTableID()+" status "+status[table.getStatusValue()]);
 		}
 		return tables;
 	}
