@@ -1,12 +1,14 @@
 package com.api;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import io.grpc.restaurantnetworkapp.Response;
 import io.grpc.restaurantnetworkapp.RestaurantServiceGrpc;
 import io.grpc.restaurantnetworkapp.Table;
+import io.grpc.restaurantnetworkapp.TableRecord;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -20,7 +22,6 @@ import io.grpc.StatusRuntimeException;
  */
 public class HostClient {
 	private static final Logger logger = Logger.getLogger(HostClient.class.getName());
-	private final ManagedChannel channel;
 	private static HostClient hostessChannel;
 	private static RestaurantServiceGrpc.RestaurantServiceBlockingStub blockingStub;
 	private static RestaurantServiceGrpc.RestaurantServiceStub newStub;
@@ -46,7 +47,6 @@ public class HostClient {
 	 */
 	private HostClient(ManagedChannel channel) 
 	{
-		this.channel = channel;
 		blockingStub = RestaurantServiceGrpc.newBlockingStub(channel);
 		newStub = RestaurantServiceGrpc.newStub(channel);
 	}
@@ -77,6 +77,26 @@ public class HostClient {
 		return newStub;
 	}
 
+	public ArrayList<Table> setTables(Collection<Table> tables){
+		logger.info("Will try to set tables and return the list of tables...");
+		ArrayList<Table> tableList = new ArrayList<Table>();
+		Iterator<Table> response = null;
+		try {
+			response = blockingStub.setup(TableRecord
+					.newBuilder()
+					.addAllTbl(tables)
+					.build());
+		}catch (StatusRuntimeException e) {
+			logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+		}
+		while(response.hasNext()) {
+			Table table = response.next();
+			tableList.add(table);
+			logger.info("Table "+table.getTableID()+" status "+status[table.getStatusValue()]);
+		}
+		return tableList;
+	}
+	
 	/**
 	 * getTable returns Table state record.
 	 * @return 
@@ -101,13 +121,5 @@ public class HostClient {
 			logger.info("Table "+table.getTableID()+" status "+status[table.getStatusValue()]);
 		}
 		return tables;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public ManagedChannel getChannel() {
-		return channel;
 	}
 }

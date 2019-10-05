@@ -19,21 +19,6 @@ import io.grpc.ServerBuilder;
  */
 public class RestaurantServer {
 	private static final Logger logger = Logger.getLogger(RestaurantServer.class.getName());
-	private static final int numberOfTables = 12;
-	
-	private static Collection<Table> RestaurantTables()
-	{
-		Collection<Table> tables = new ArrayList<Table>();
-		for(int i = 0; i < numberOfTables; i++)
-		{
-			tables.add(Table
-					.newBuilder()
-					.setTableID(i+1)
-					.setStatus(Table.TableState.CLEAN)
-					.build());
-		}
-		return tables;
-	}
 	
 	public static void main(String[] args) 
 			throws IOException, InterruptedException 
@@ -41,7 +26,7 @@ public class RestaurantServer {
 		logger.info(InetAddress.getLocalHost().toString());
 		Server server = ServerBuilder
 				.forPort(8080)
-				.addService(ServiceStub.getInstance(RestaurantTables()))
+				.addService(ServiceStub.getInstance())
 				.intercept(new ServerInterceptorHandler())
 				.handshakeTimeout(10, TimeUnit.SECONDS)
 				.build();

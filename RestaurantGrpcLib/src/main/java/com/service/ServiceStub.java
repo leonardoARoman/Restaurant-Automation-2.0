@@ -38,9 +38,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	private static Queue<Order> orderQuee;
 	private static Collection<Order> orderList;
 	//private static String DB = "./src/main/database/RestaurantDB.db";
-	private static String URL = "./src/main/database/tableRecord.dat";
+	private static String TableRecDatabaseURL = "./src/main/database/tableRecord.dat";
 	//private static String URL = "./database/tableRecord.dat";
-	private static String URL2 = "./src/main/database/orderRecord.dat";
+	private static String OrderRecDatabaseURL = "./src/main/database/orderRecord.dat";
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -74,13 +74,8 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	 * @return singleton of type ServiceStub
 	 * @throws IOException
 	 */
-	public static ServiceStub getInstance() throws IOException 
-	{
-		if(instance==null) 
-		{
-			instance = new ServiceStub();
-		}
-		return instance;
+	public static ServiceStub getInstance() throws IOException {
+		return instance == null ? new ServiceStub() : instance;
 	}
 	/**
 	 * 
@@ -88,16 +83,12 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	 * @return singleton of type ServiceStub with tables configured at instantiation
 	 * @throws IOException Empty container
 	 */
-	public static ServiceStub getInstance(Collection<Table> tableRecord) throws IOException 
-	{
-		if(instance==null) 
-		{
+	public static ServiceStub getInstance(Collection<Table> tableRecord) throws IOException {
+		if(instance==null) {
 			instance = new ServiceStub(tableRecord);
-			try 
-			{
+			try {
 				updateTableRecord();
-			} catch (IOException e) 
-			{
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -110,6 +101,13 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	@Override
 	public void setup(TableRecord tablerecord, 
 			StreamObserver<Table> responseObserver) {
+		ServiceStub.tableRecord = tablerecord.getTblList();
+		try {
+			updateTableRecord();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ServiceStub.tableRecord.forEach(t->responseObserver.onNext(t));
 		responseObserver.onCompleted();
 	}
 
@@ -121,11 +119,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	public void add(Table table,
 			StreamObserver<Response> responseObserver) {
 		tableRecord.add(table);
-		try 
-		{
+		try {
 			updateTableRecord();
-		} catch (IOException e) 
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -161,7 +157,6 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					//tableRecord.forEach(t->responseObserver.onNext(t));
 				}
 				tableObservers
 				.forEach(o->o.onNext(ReceivedTable
@@ -188,8 +183,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	@Override
 	public void tables(Response request,
 			StreamObserver<Table> responseObserver) {
-		for(Table table: tableRecord) { responseObserver.onNext(table); }
-
+		tableRecord.forEach(t->responseObserver.onNext(t));
 		responseObserver.onCompleted();
 	}
 
@@ -236,8 +230,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			//To do: notify waiter after removing order. It means order is ready
 			orderList.remove(order);
 		}
-		for(Object o: orderList) { responseObserver.onNext((Order)o); }
-
+		orderList.forEach(o->responseObserver.onNext((Order)o));
 		responseObserver.onCompleted();
 	}
 
@@ -260,7 +253,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		FileOutputStream oututfile = null;
 		try 
 		{
-			oututfile = new FileOutputStream(URL);
+			oututfile = new FileOutputStream(TableRecDatabaseURL);
 			outputStream = new ObjectOutputStream(oututfile);
 			outputStream.writeObject(tableRecord);
 		} 
@@ -285,20 +278,16 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 	{
 		ObjectOutputStream outputStream = null;
 		FileOutputStream oututfile = null;
-		try 
-		{
-			oututfile = new FileOutputStream(URL2);
+		try {
+			oututfile = new FileOutputStream(OrderRecDatabaseURL);
 			outputStream = new ObjectOutputStream(oututfile);
 			outputStream.writeObject(orderRecord);
 		} 
-		catch (IOException  e) 
-		{
+		catch (IOException  e) {
 			e.printStackTrace();
 		}
-		finally 
-		{
-			if (outputStream != null)
-			{
+		finally {
+			if (outputStream != null) {
 				outputStream.close();
 			}
 		}
