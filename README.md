@@ -1,6 +1,6 @@
 # Restaurant Automation 2.0 
 ## A Distributed Approach Using gRPC
-This distributed application uses gRPC framework to automate a restaurant service distribution between desktop applications and mobile apps.
+This distributed application uses gRPC framework to automate a restaurant service between desktop applications and mobile apps.
 
 ## Synchronizing Workers Using Mobile and Desktop Applications
 <img width="358" alt="Screen Shot 2019-11-16 at 9 11 06 AM" src="https://user-images.githubusercontent.com/25443367/68994480-6c442580-0851-11ea-9575-ee7ddab9865c.png">
