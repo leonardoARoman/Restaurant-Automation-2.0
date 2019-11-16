@@ -1,4 +1,4 @@
-package com.RestaurantGrpcLib;
+/*package com.RestaurantGrpcLib;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,12 +70,12 @@ class ServiceStubTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	/**
 	 * Test server connection state
 	 */
-	@Test
+	/*@Test
 	@DisplayName("Server Connection Test")
 	void serverTest() {
 		assertEquals(false,server.isShutdown(),"Server should be live.");
@@ -129,15 +129,15 @@ class ServiceStubTest {
 					// TODO Auto-generated method stub
 
 				}
-			}).onNext(updateTable);
+			}).onNext(updateTable);*/
 			
 			/*updateTable.onNext(Table.newBuilder().setTableID(0).setStatus(Table.TableState.DIRTY).build());
 			updateTable.onNext(Table.newBuilder().setTableID(1).setStatus(Table.TableState.TAKEN).build());
 			updateTable.onNext(Table.newBuilder().setTableID(2).setStatus(Table.TableState.DIRTY).build());
 			updateTable.onNext(Table.newBuilder().setTableID(3).setStatus(Table.TableState.TAKEN).build());*/
 			
-			assertEquals(Table.TableState.DIRTY,
-					client.getNewBlockingStub().tablestate(Response.newBuilder().setMessage("0").build()).getStatus());
+			/*assertEquals(Table.TableState.DIRTY,
+					client.getNewBlockingStub().tablestate(Response.newBuilder().setMessage("0").build()).getStatus());*/
 			
 			/*assertAll(
 					()->assertEquals(Table.TableState.DIRTY,
@@ -151,7 +151,7 @@ class ServiceStubTest {
 					()->assertEquals(Table.TableState.CLEAN,
 							client.getNewBlockingStub().tablestate(Response.newBuilder().setMessage("4").build()).getStatus()));*/			
 					
-		}
+		/*}
 	}
 
 	@Nested
@@ -180,4 +180,4 @@ class ServiceStubTest {
 		server.shutdown();
 		assertEquals(true,server.isShutdown(),"Server should be off.");
 	}
-}
+}*/
