@@ -56,6 +56,16 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		orderQuee 		= new LinkedList<Order>();		// To remove from queue and update orderlist
 	}
 
+	private ServiceStub(Collection<Table>  tables) {
+		dishObservers 	= new LinkedHashSet<StreamObserver<RecievedOrder>>();
+		tableObservers	= new LinkedHashSet<StreamObserver<ReceivedTable>>();
+		tableRecord 	= new ArrayList<Table>();		// For table inventory
+		orderRecord 	= new ArrayList<Order>();		// For record storage
+		orderIDs 		= new HashMap<Integer,Order>();	// For quick access transaction
+		orderList 		= new ArrayList<Order>();		// To display in kitchen monitors
+		orderQuee 		= new LinkedList<Order>();		// To remove from queue and update orderlist
+		tableRecord = tables;
+	}
 	/**
 	 * 
 	 * @return singleton of type ServiceStub
@@ -65,6 +75,9 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		return instance == null ? new ServiceStub() : instance;
 	}
 
+	public static ServiceStub getInstance(Collection<Table>  tables) throws IOException {
+		return instance == null ? new ServiceStub(tables) : instance;
+	}
 	///////////////////////////////////////////////////////////////////////////////////////
 	// setup: not being used
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +127,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 		return new StreamObserver<Table>() {
 			@Override
 			public void onNext(Table value) {
+				System.out.println("Intercepted Request: Update for Table ");
 				System.out.println(value.getTableID()+"\n"+value);	
 				Table table = tableRecord
 						.stream()
@@ -137,7 +151,7 @@ RestaurantServiceGrpc.RestaurantServiceImplBase
 			}
 			@Override
 			public void onError(Throwable t) {
-				System.out.println(t.toString());
+				System.out.println("Throwing error: "+t.toString());
 			}
 			@Override
 			public void onCompleted() {
