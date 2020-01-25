@@ -12,7 +12,7 @@ public class ChannelManager {
 
     private static ChannelManager channelManagerInstance;
     private ManagedChannel channel;
-    private final String host = "192.168.1.11";
+    private final String host = "192.168.1.7";
     private final int port = 8080;
 
     private ChannelManager() {

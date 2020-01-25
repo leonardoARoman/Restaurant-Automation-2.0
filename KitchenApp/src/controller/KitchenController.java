@@ -33,7 +33,7 @@ public class KitchenController {
 	 * @param mainStage
 	 */
 	public void start(Stage mainStage) {
-		kitchenMonitor = KitchenClient.connectToServer("10.0.0.169", 8080);
+		kitchenMonitor = KitchenClient.connectToServer("192.168.1.7", 8080);
 		stage = mainStage;
 		startMonitor();
 	}

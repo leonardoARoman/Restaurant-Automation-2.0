@@ -47,7 +47,7 @@ public class HostController {
 
 	public void start(Stage primaryStage) throws IOException {
 		// TODO Auto-generated method stub
-		tableMonitor = HostClient.connectToServer("10.0.0.169",8080);
+		tableMonitor = HostClient.connectToServer("192.168.1.7",8080);
 		tables = new ArrayList<Table>();
 		button = new ImageView[24];
 
